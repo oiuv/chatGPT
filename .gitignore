@@ -1,0 +1,6 @@
+*.cmd
+*.exe
+*.json
+*.log
+driver*
+OPENAI_API_KEY
