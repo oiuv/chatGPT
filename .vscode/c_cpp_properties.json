@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "LPC",
+            "includePath": [
+                "${workspaceFolder}/include/"
+            ],
+            "forcedInclude": [
+                "${workspaceFolder}/include/globals.h"
+            ],
+            "defines": [
+                "MUDOS"
+            ]
+        }
+    ],
+    "version": 4
+}
