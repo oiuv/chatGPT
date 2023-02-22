@@ -15,7 +15,7 @@ varargs void create(string id)
         seteuid(id);
         set_living_name(id);
         move_object(VOID_OB);
-        say(HIG "~Hi~用户(" + id + ")连线了^_^\n" NOR);
+        say(HIG "🥰 ~Hi~用户(" + id + ")连线了^_^\n" NOR);
     }
 }
 
@@ -63,6 +63,6 @@ mixed process_input(string verb)
 
 void net_dead()
 {
-    say(HIR "~Bye~用户(" + geteuid() + ")离开了……\n" NOR);
+    say(HIR "😇 ~Bye~ 用户(" + geteuid() + ")离开了……\n" NOR);
     destruct();
 }

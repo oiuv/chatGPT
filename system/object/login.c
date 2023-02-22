@@ -1,14 +1,18 @@
+#include <ansi.h>
+
 void setup(string id)
 {
     object from, to;
-
-    if (!id || id == "")
+    // todo 建议增加敏感词验证
+    id = trim(id);
+    if (!pcre_match(id, "^[0-9a-zA-Z\\p{Han}]{1,9}$"))
     {
-        write("ID不能为空，请重新输入：");
+        write(HIR "昵称不能包含特殊符号且不能超过9位，请重新输入：" NOR);
         input_to("setup");
     }
     else
     {
+        write(HIG "😘 欢迎来到" MUD_NAME "，请直接发言向chatGPT提问吧~\n" NOR);
         from = this_object();
         to = new(USER_OB, id);
         exec(to, from);
@@ -21,7 +25,7 @@ void setup(string id)
 void login()
 {
     write(read_file(MOTD));
-    write("请输入你的ID：");
+    write(HIC "请输入你的昵称：" NOR);
     input_to("setup");
 }
 

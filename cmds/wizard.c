@@ -2,6 +2,11 @@ int main(object me, string arg)
 {
     function f;
 
+    if (query_ip_number(me) != "127.0.0.1")
+    {
+        return 0;
+    }
+
     if (wizardp(me))
     {
         f = bind((: disable_wizard :), me);

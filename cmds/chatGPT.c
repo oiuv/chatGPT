@@ -28,7 +28,7 @@ int main(object me, string arg)
         return notify_fail(HIM "【提示】" NOR HIG "chatGPT思考中……" NOR "\n"); // 直接向chatGPT提问
     }
 
-    return notify_fail(HIW "【提示】内容过短，chatGPT没注意到~\n" NOR);
+    return notify_fail(HIW "【提示】chatGPT未能捕捉到足够的上下文信息来回答您的查询 T_T\n" NOR);
 }
 
 int help(object me)

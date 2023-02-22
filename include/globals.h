@@ -4,7 +4,7 @@
 #define USER_OB "/system/object/user"
 #define VOID_OB "/system/object/void"
 
-#define MOTD "/README.md"
+#define MOTD "/MOTD"
 
 #define LOG_DIR "/log/"
 

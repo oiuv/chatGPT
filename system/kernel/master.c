@@ -9,7 +9,7 @@ string get_root_uid()
 
 string author_file(string file)
 {
-    debug_message("author_file : " + file);
+    // debug_message("author_file : " + file);
     if (file == "/system/kernel/master")
     {
         return ROOT_UID;
@@ -25,7 +25,7 @@ string get_bb_uid()
 
 string domain_file(string file)
 {
-    debug_message("domain_file : " + file);
+    // debug_message("domain_file : " + file);
     if (file == "/")
     {
         return ROOT_UID;
@@ -36,7 +36,7 @@ string domain_file(string file)
 
 string creator_file(string file)
 {
-    debug_message("creator_file : " + file);
+    // debug_message("creator_file : " + file);
     return MUID;
 }
 
