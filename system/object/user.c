@@ -49,6 +49,7 @@ mixed process_input(string verb)
     switch (verb[0])
     {
     case '@':
+    case '.':
         return "chat " + verb[1..];
     }
 
