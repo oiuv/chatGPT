@@ -9,7 +9,8 @@ void prompt(string prompt)
 {
     // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
     string key = element_of(read_lines("OPENAI_API_KEY"));
-    exec(OPENAI_CMD, "-k " + key + " api completions.create -m text-davinci-003 -M 3721 -p " + prompt);
+    // exec(OPENAI_CMD, "-k " + key + " api completions.create -m text-davinci-003 -M 3721 -p " + prompt);
+    exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3721", "-p", prompt }));
 }
 
 protected void response(string result)
@@ -18,6 +19,8 @@ protected void response(string result)
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = "\n-提示" + element_of(read_lines("tips.md")) + "\n";
     shout(arg + tips);
+    // 备份问答
+    write_file(LOG_DIR + "chatGPT.md", "## " + result + "\n\n");
 }
 
 int main(object me, string arg)

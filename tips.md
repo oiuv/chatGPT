@@ -1,4 +1,4 @@
 - 这是使用LPC语言基于chatGPT开发的开源应用，作者：mud.ren
 - 请注意不要过于频繁的提问
 - 请不要提违反chatGPT Usage policies的问题
-- 提问中如果有空格可用`_`代替
+- 此项目开源地址：https://github.com/oiuv/chatGPT
