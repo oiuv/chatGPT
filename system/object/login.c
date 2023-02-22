@@ -38,3 +38,9 @@ void logon()
     call_out("login", 1);
 #endif
 }
+
+void net_dead()
+{
+    debug_message(ctime() + " net_dead " + query_ip_number());
+    destruct();
+}

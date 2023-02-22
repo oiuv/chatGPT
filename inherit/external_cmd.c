@@ -8,7 +8,7 @@ nosave mapping fd_msg;
 // 客户端响应，请重写此接口处理响应
 protected void response(string result)
 {
-    debug(result);
+    debug_message(result);
 }
 
 protected void on_read(int fd, string msg)
@@ -46,7 +46,7 @@ object exec(int cmd, mixed arg)
     }
     fd_msg[fd] = "";
 #else
-    debug("不支持 external_start");
+    debug_message("不支持 external_start");
 #endif
     return this_object();
 }
