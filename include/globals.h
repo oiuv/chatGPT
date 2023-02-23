@@ -4,7 +4,7 @@
 #define USER_OB "/system/object/user"
 #define VOID_OB "/system/object/void"
 
-#define MOTD "/MOTD"
+#define MOTD "/system/etc/MOTD" + random(3)
 
 #define LOG_DIR "/log/"
 

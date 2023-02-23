@@ -3,11 +3,16 @@
 void setup(string id)
 {
     object from, to;
-    // todo 建议增加敏感词验证
+
     id = trim(id);
-    if (!pcre_match(id, "^[0-9a-zA-Z\\p{Han}]{1,9}$"))
+    if (!pcre_match(id, "^[0-9a-zA-Z\\p{Han}]{3,9}$"))
     {
-        write(HIR "昵称不能包含特殊符号且不能超过9位，请重新输入：" NOR);
+        write(HIY "⚠️ 昵称不能包含特殊符号且长度要求为3-9位\n请重新输入昵称：" NOR);
+        input_to("setup");
+    }
+    else if (member_array(lower_case(id), read_lines("SensitiveWords.txt")) != -1)
+    {
+        write(HIR "🈲 你的昵称为本站禁止使用的敏感词汇\n请重新输入昵称：" NOR);
         input_to("setup");
     }
     else

@@ -1,0 +1,15 @@
+# 敏感词列表，禁止用做昵称，以下列表使用chatGPT自动生成的
+习近平
+共产党
+台湾独立
+bitch
+fuck
+shit
+asshole
+cunt
+dick
+pussy
+whore
+racist
+sexist
+rape

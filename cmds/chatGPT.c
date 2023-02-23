@@ -9,7 +9,7 @@ void prompt(string prompt)
 {
     // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
     string key = element_of(read_lines("OPENAI_API_KEY"));
-    // exec(OPENAI_CMD, "-k " + key + " api completions.create -m text-davinci-003 -M 3721 -p " + prompt);
+    // usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-o ORGANIZATION] {api,tools,wandb} ...
     exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3721", "-p", prompt }));
 }
 
@@ -25,13 +25,8 @@ protected void response(string result)
 
 int main(object me, string arg)
 {
-    if (strlen(arg) > 9)
-    {
-        prompt(arg);
-        return notify_fail(HIM "【提示】" NOR HIG "chatGPT思考中……" NOR "\n"); // 直接向chatGPT提问
-    }
-
-    return notify_fail(HIW "【提示】chatGPT未能捕捉到足够的上下文信息来回答您的查询 T_T\n" NOR);
+    prompt(arg); // 直接向chatGPT提问
+    return notify_fail(HIM "【提示】" NOR HIG "chatGPT思考中……" NOR "\n"); // 因为还没获取结果，给未成功响应
 }
 
 int help(object me)

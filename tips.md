@@ -1,4 +1,9 @@
-- 这是使用LPC语言基于chatGPT开发的开源应用，作者：mud.ren
+- 这是使用LPC语言基于chatGPT开发的开源应用，作者：雪风@mud.ren
 - 请注意不要过于频繁的提问
 - 请不要提违反chatGPT Usage policies的问题
+- 请不要提过于无聊的问题浪费API资源
+- 发言内容少于10个字符默认为普通聊天（不会发给chatGPT）
+- 以英文句号 `.` 开头的内容为普通聊天（不会发给chatGPT）
+- 输入符号 `@` 可查看在线用户列表
+- 如果你需要提少于10个字符的问题，请输入 `chatGPT 问题`
 - 此项目开源地址：https://github.com/oiuv/chatGPT

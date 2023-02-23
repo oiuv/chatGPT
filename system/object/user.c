@@ -34,8 +34,10 @@ int command_hook(string arg)
     {
         string prompt = query_verb() + (arg || "");
         CHAT_CMD->main(this_object(), prompt);
-
-        return CHATGPT_CMD->main(this_object(), prompt);
+        if (strlen(prompt) < 10)
+            return notify_fail(HIW "【提示】因API资源有限，少于10个字符的内容不会提交给chatGPT\n" NOR, );
+        else
+            return CHATGPT_CMD->main(this_object(), prompt);
     }
 }
 
@@ -49,6 +51,7 @@ mixed process_input(string verb)
     switch (verb[0])
     {
     case '@':
+        return "who " + verb[1..];
     case '.':
         return "chat " + verb[1..];
     }
