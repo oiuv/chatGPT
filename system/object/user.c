@@ -15,7 +15,7 @@ varargs void create(string id)
         seteuid(id);
         set_living_name(id);
         move_object(VOID_OB);
-        say(HIG "🥰 ~Hi~用户(" + id + ")连线了^_^\n" NOR);
+        say(HIG "🥰 ~Hi~ 用户(" + id + ")连线了^_^\n" NOR);
     }
 }
 
@@ -32,12 +32,17 @@ int command_hook(string arg)
     }
     else
     {
-        string prompt = query_verb() + (arg || "");
-        CHAT_CMD->main(this_object(), prompt);
+        string prompt = query_verb() + (arg ? " " + arg : "");
         if (strlen(prompt) < 10)
-            return notify_fail(HIW "【提示】因API资源有限，少于10个字符的内容不会提交给chatGPT\n" NOR, );
+        {
+            CHAT_CMD->main(this_object(), prompt);
+            return notify_fail(HIW "【提示】因API资源有限，少于10个字符的内容默认为聊天，不会当问题提交给chatGPT\n" NOR, );
+        }
         else
+        {
+            CHAT_CMD->main(this_object(), prompt, "提问");
             return CHATGPT_CMD->main(this_object(), prompt);
+        }
     }
 }
 
