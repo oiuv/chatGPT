@@ -15,7 +15,7 @@ int main(object me, string arg)
     foreach (object user in livings())
     {
         int idle = query_idle(user);
-        printf("%-6d%-20s%-9s\n", getcid(user), geteuid(user), idle < 60 ? "<活跃中>" : "发呆 " + idle + " 秒");
+        printf("%-6d%-20s%-9s\n", getcid(user), geteuid(user), idle < 180 ? "<活跃中>" : "发呆 " + idle + " 秒");
     }
     return 1;
 }

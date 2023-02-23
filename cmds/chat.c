@@ -1,11 +1,11 @@
 #include <ansi.h>
 
-int main(object me, string arg, string type)
+int main(object me, string arg)
 {
     if (!arg)
         arg = "...";
 
-    arg = HIM "【" + (type || "聊天") + "】" NOR HIY + geteuid(me) + "@" MUD_NAME "：" NOR HIC + arg + NOR "\n";
+    arg = HIC "【聊天】" NOR HIY + geteuid(me) + "@" MUD_NAME "：" NOR HIC + arg + NOR "\n";
 
     write(arg);
     say(arg);

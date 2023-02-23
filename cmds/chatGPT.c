@@ -25,10 +25,17 @@ protected void response(string result)
 
 int main(object me, string arg)
 {
+    if (!arg)
+        return notify_fail("没有内容chatGPT无法判断你的想法😅\n");
+
     // 为了安全，记录提问信息
-    write_file(LOG_DIR + "chat.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(me), geteuid(me), arg));
+    write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(me), geteuid(me), arg));
     // 直接向chatGPT提问
     prompt(arg);
+    // 显示问题
+    arg = HIM "【提问】" NOR HIY + geteuid(me) + "@" MUD_NAME "：" NOR HIC + arg + NOR "\n";
+    write(arg);
+    say(arg);
     // 因为还没获取结果，给未成功响应
     return notify_fail(HIM "【提示】" NOR HIG "chatGPT思考中……" NOR "\n");
 }

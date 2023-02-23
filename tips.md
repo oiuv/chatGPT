@@ -6,4 +6,5 @@
 - 以英文句号 `.` 开头的内容为普通聊天（不会发给chatGPT）
 - 输入符号 `@` 可查看在线用户列表
 - 如果你需要提少于10个字符的问题，请输入 `chatGPT 问题`
+- 对AI来说你的提问是提示(prompt)，AI分析后做预测并完成(completion)
 - 此项目开源地址：https://github.com/oiuv/chatGPT

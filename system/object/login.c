@@ -12,7 +12,12 @@ void setup(string id)
     }
     else if (member_array(lower_case(id), read_lines("SensitiveWords.txt")) != -1)
     {
-        write(HIR "🈲 你的昵称为本站禁止使用的敏感词汇\n请重新输入昵称：" NOR);
+        write(HIR "🈲 此昵称为本站禁止使用的敏感词汇\n请重新输入昵称：" NOR);
+        input_to("setup");
+    }
+    else if (find_player(id))
+    {
+        write(HIM "💔 此昵称已被其它用户占用了\n请重新输入昵称：" NOR);
         input_to("setup");
     }
     else

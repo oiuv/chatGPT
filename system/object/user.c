@@ -32,15 +32,15 @@ int command_hook(string arg)
     }
     else
     {
+        // 没有匹配到指令的转为聊天或提问
         string prompt = query_verb() + (arg ? " " + arg : "");
         if (strlen(prompt) < 10)
         {
             CHAT_CMD->main(this_object(), prompt);
-            return notify_fail(HIW "【提示】因API资源有限，少于10个字符的内容默认为聊天，不会当问题提交给chatGPT\n" NOR, );
+            return notify_fail(HIW "【提示】因API资源有限，少于10个字符的内容默认为聊天而不是提问\n" NOR, );
         }
         else
         {
-            CHAT_CMD->main(this_object(), prompt, "提问");
             return CHATGPT_CMD->main(this_object(), prompt);
         }
     }
@@ -49,7 +49,9 @@ int command_hook(string arg)
 mixed process_input(string verb)
 {
     string *word = explode(verb, " ");
-    mapping alias = ([]);
+    mapping alias = ([
+        "say":"chat",
+    ]);
 
     // verb = lower_case(verb);
 
@@ -61,10 +63,19 @@ mixed process_input(string verb)
         return "chat " + verb[1..];
     }
 
-    if (sizeof(word) && !undefinedp(alias[word[0]]))
+    if (sizeof(word))
     {
-        word[0] = alias[word[0]];
-        return implode(word, " ");
+        // 长内容直接转为提问
+        if (sizeof(word[0]) > 15)
+        {
+            return "chatGPT " + verb;
+        }
+        // 处理指令别名
+        if (!undefinedp(alias[word[0]]))
+        {
+            word[0] = alias[word[0]];
+            return implode(word, " ");
+        }
     }
 
     return verb;
