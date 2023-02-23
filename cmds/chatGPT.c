@@ -10,7 +10,7 @@ void prompt(string prompt)
     // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
     string key = element_of(read_lines("OPENAI_API_KEY"));
     // usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-o ORGANIZATION] {api,tools,wandb} ...
-    exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3721", "-p", prompt }));
+    exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3072", "-p", prompt }));
 }
 
 protected void response(string result)

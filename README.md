@@ -46,6 +46,8 @@ pip install openai
 driver config.cfg
 ```
 
+> 经测试截止2月底的FLuffOS驱动在Windows系统下存在BUG，所以推荐使用Ubuntu系统
+
 ## 使用说明
 
 ### 提问
