@@ -99,7 +99,7 @@ function onload() {
   });
 
   if(isMobile()) {
-    el_container.style.height = "50vh";
+    el_container.style.height = "100vh";
     fitAddon.fit();
   } else {
     el_container.style.height = $(window).height();
