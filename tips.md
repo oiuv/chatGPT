@@ -8,5 +8,5 @@
 - 如果你需要提少于10个字符的问题，请输入 `chatGPT 问题`
 - 对AI来说你的提问是提示(prompt)，AI分析预测并完成(completion)
 - chatGPT用中文回答内容上限大约2000字，这包括了你提示的描述字数
-- 如果想复制问答内容推荐使用mudlet客户端连接（端口：6666）
+- 你也可以使用mudlet等客户端连接服务器（端口：6666）
 - 此项目开源地址：https://github.com/oiuv/chatGPT

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chatGPT@mud.ren</title>
+    <meta name="keywords" content="websocket,chatGPT,智能问答,mudGPT,AI机器人">
+    <meta name="description" content="mudGPT是使用LPC语言基于chatGPT的API开发的知识问题聊天应用，简洁易用，清纯无广告。">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.13.0/css/xterm.css">
+    <script src="https://cdn.jsdelivr.net/npm/xterm@4.13.0/lib/xterm.min.js"></script>
+    <script src="xterm-addon-fit.min.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Noto Sans Mono', monospace;
+            font-size: medium;
+            background-color: darkslategray
+        }
+
+    </style>
+    <script type="text/javascript">
+        let ws = null
+        const term = new Terminal({
+            convertEol: true,
+            disableStdin: true
+        });
+        const fitAddon = new FitAddon.FitAddon();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 玩家输入指令
+            const cmd = document.getElementById("cmd");
+            // 指令发送按钮
+            const send = document.getElementById("send");
+            // 回车发送指令
+            cmd.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    sendCmd();
+                }
+            });
+            const container = document.getElementById('container')
+            container.style.height = "87vh";
+            term.loadAddon(fitAddon);
+            term.open(container);
+            fitAddon.fit();
+        });
+        window.addEventListener('resize', function (e) {
+            fitAddon.fit();
+        });
+
+        // 取得websocket地址
+        function get_ws_url(extra_url) {
+            let pcol;
+            let u = document.URL;
+
+            if (u.substring(0, 5) === "https") {
+                pcol = "wss://";
+                u = u.substr(8);
+            } else {
+                pcol = "ws://";
+                if (u.substring(0, 4) === "http")
+                    u = u.substr(7);
+            }
+            u = u.split("/");
+            return pcol + u[0] + "/" + extra_url;
+        }
+        // 连接游戏
+        function mudConnect() {
+            if ("WebSocket" in window) {
+                let url = get_ws_url();
+                // 打开一个 web socket
+                ws = new WebSocket(url, "ascii");
+                ws.binaryType = "arraybuffer";
+                ws.onopen = (_event) => {
+                    console.log("服务器连接成功！");
+                    cmd.focus();
+                };
+                ws.onmessage = (event) => {
+                    let data = event.data;
+                    if (data instanceof ArrayBuffer) {
+                        // console.log(data);
+                        let u8array = new Uint8Array(data);
+                        // xterm显示
+                        term.write(u8array);
+                    }
+                };
+                ws.onclose = (_event) => {
+                    console.log("服务器连接断开！");
+                    send.setAttribute("disabled", "disabled");
+                    cmd.setAttribute("disabled", "disabled");
+                };
+                ws.onerror = (_event) => {
+                    console.log("服务器连接失败！");
+                };
+            } else {
+                // 浏览器不支持 WebSocket
+                alert("您的浏览器不支持 WebSocket!");
+            }
+        }
+        // 发送指令
+        function sendCmd() {
+            if (ws) {
+                ws.send(cmd.value + "\n");
+                cmd.value = "";
+            } else {
+                console.log("服务器未连接！");
+            }
+        }
+    </script>
+</head>
+
+<body onload="mudConnect()">
+    <div class="container">
+        <div>
+            <h2 class="box title has-text-centered has-text-link">MudGPT</h2>
+        </div>
+        <div id="container">
+            <div id="terminal"></div>
+        </div>
+        <div class="field has-addons">
+            <input type="text" class="input is-link is-focused" name="cmd" id="cmd" placeholder="请在此输入内容">
+            <input type="submit" class="button is-link" onclick="sendCmd()" id="send">
+        </div>
+    </div>
+</body>
+
+</html>
