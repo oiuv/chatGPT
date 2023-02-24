@@ -15,6 +15,8 @@
 
 ----
 
+本项目使用LPC语言开发，前端功能使用[xterm.js](https://github.com/xtermjs/xterm.js)实现，样式使用[bulma](https://github.com/jgthms/bulma)框架。
+
 ![mudGPT](https://oss.mud.ren/images/mudGPT.png)
 
 ## 安装说明

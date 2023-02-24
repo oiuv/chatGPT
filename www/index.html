@@ -16,6 +16,7 @@
     <script src="js/widechar_width.js"></script>
     <script src="js/xterm-addon-unicode14.js"></script>
     <script src="js/xterm-addon-web-links.min.js"></script>
+    <script src="js/xterm-addon-attach.min.js"></script>
     <style>
         @font-face {
             font-family: 'Noto Sans Mono';
@@ -110,22 +111,15 @@
                 let url = get_ws_url();
                 // 打开一个 web socket
                 ws = new WebSocket(url, "ascii");
-                ws.binaryType = "arraybuffer";
+                const attachAddon = new AttachAddon.AttachAddon(ws);
+                term.loadAddon(attachAddon);
                 ws.onopen = (_event) => {
                     console.log("服务器连接成功！");
                     cmd.focus();
                 };
-                ws.onmessage = (event) => {
-                    let data = event.data;
-                    if (data instanceof ArrayBuffer) {
-                        // console.log(data);
-                        let u8array = new Uint8Array(data);
-                        // xterm显示
-                        term.write(u8array);
-                    }
-                };
                 ws.onclose = (_event) => {
                     console.log("服务器连接断开！");
+                    term.write("\r\n<======== Connection Lost ========>\r\n");
                     send.setAttribute("disabled", "disabled");
                     cmd.setAttribute("disabled", "disabled");
                 };
