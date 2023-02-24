@@ -7,22 +7,22 @@ void setup(string id)
     id = trim(id);
     if (!pcre_match(id, "^[0-9a-zA-Z\\p{Han}]{3,9}$"))
     {
-        write(HIY "⚠️ 昵称不能包含特殊符号且长度要求为3-9位\n请重新输入昵称：" NOR);
+        write(HIY "\n⚠️ 昵称不能包含特殊符号且长度要求为3-9位\n请重新输入昵称：" NOR);
         input_to("setup");
     }
     else if (member_array(lower_case(id), read_lines("SensitiveWords.txt")) != -1)
     {
-        write(HIR "🈲 此昵称为本站禁止使用的敏感词汇\n请重新输入昵称：" NOR);
+        write(HIR "\n🈲 此昵称为本站禁止使用的敏感词汇\n请重新输入昵称：" NOR);
         input_to("setup");
     }
     else if (find_player(id))
     {
-        write(HIM "💔 此昵称已被其它用户占用了\n请重新输入昵称：" NOR);
+        write(HIM "\n💔 此昵称已被其它用户占用了\n请重新输入昵称：" NOR);
         input_to("setup");
     }
     else
     {
-        write(HIG "😘 欢迎来到" MUD_NAME "，请直接发言向chatGPT提问吧~\n" NOR);
+        write(HIG "\n😘 欢迎来到" MUD_NAME "，请直接发言向chatGPT提问吧~\n" NOR);
         from = this_object();
         to = new(USER_OB, id);
         exec(to, from);
