@@ -35,10 +35,10 @@ int command_hook(string arg)
     {
         // 没有匹配到指令的转为聊天或提问
         string prompt = query_verb() + (arg ? " " + arg : "");
-        if (strlen(prompt) < 10)
+        if (strlen(prompt) < 5)
         {
             CHAT_CMD->main(this_object(), prompt);
-            return notify_fail(HIW "【提示】因API资源有限，少于10个字符的内容默认为聊天而不是提问\n" NOR, );
+            return notify_fail(HIW "【提示】因API资源有限，少于5个字符的内容默认为聊天而不是提问\n" NOR, );
         }
         else
         {
@@ -90,9 +90,10 @@ void net_dead()
 
 void heart_beat()
 {
-    if (query_idle(this_user()) > 600)
+    if (query_idle(this_user()) > 1800)
     {
-        say(HIR "💔 ~Bye~ 用户(" + geteuid() + ")因超过10分钟不活跃自动退出了……\n" NOR);
+        write(HIR "💔 ~Bye~ 因超过半小时不活跃，你自动离线了……\n" NOR);
+        say(HIR "💔 ~Bye~ 用户(" + geteuid() + ")因发呆时间过长自动离线了……\n" NOR);
         destruct();
     }
 }

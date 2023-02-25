@@ -35,7 +35,7 @@ int main(object me, string arg)
     write("执行效率：" + query_load_average() + "\n");
     write("内存占用：" + memory_info() / 1024 / 1024 + "M\n");
     write("运行时间：" + duration() + "\n");
-    write("在线用户：" + sizeof(users()) + "人\n");
+    write("连线用户：" + sizeof(users()) + "人\n"); // 包括未登录用户
     write("载入对象：" + sizeof(objects()) + "个\n");
 
     return 1;
