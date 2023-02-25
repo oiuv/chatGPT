@@ -5,9 +5,9 @@ void setup(string id)
     object from, to;
 
     id = trim(id);
-    if (!pcre_match(id, "^[0-9a-zA-Z\\p{Han}]{3,9}$"))
+    if (!pcre_match(id, "^[0-9a-zA-Z\\p{Han}]{2,8}$"))
     {
-        write(HIY "\n⚠️ 昵称不能包含特殊符号且长度要求为3-9位\n请重新输入昵称：" NOR);
+        write(HIY "\n⚠️ 昵称不能包含特殊符号且长度要求为2-8位\n请重新输入昵称：" NOR);
         input_to("setup");
     }
     else if (member_array(lower_case(id), read_lines("SensitiveWords.txt")) != -1)
@@ -35,7 +35,8 @@ void setup(string id)
 void login()
 {
     write(read_file(MOTD));
-    write(HIC "请输入你的昵称：" NOR);
+    write("\n");
+    write(HBRED "提问之前请先给自己起个有趣的昵称：" NOR);
     input_to("setup");
 }
 

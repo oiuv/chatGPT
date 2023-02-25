@@ -14,6 +14,7 @@ varargs void create(string id)
         add_action("command_hook", "", 1);
         seteuid(id);
         set_living_name(id);
+        set_heart_beat(60);
         move_object(VOID_OB);
         say(HIG "🥰 ~Hi~ 用户(" + id + ")连线了^_^\n" NOR);
     }
@@ -85,4 +86,13 @@ void net_dead()
 {
     say(HIR "😇 ~Bye~ 用户(" + geteuid() + ")离开了……\n" NOR);
     destruct();
+}
+
+void heart_beat()
+{
+    if (query_idle(this_user()) > 600)
+    {
+        say(HIR "💔 ~Bye~ 用户(" + geteuid() + ")因超过10分钟不活跃自动退出了……\n" NOR);
+        destruct();
+    }
 }

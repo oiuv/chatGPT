@@ -19,3 +19,14 @@ int main(object me, string arg)
     }
     return 1;
 }
+
+int help(object me)
+{
+    write(@HELP
+指令格式 : who
+指令说明:
+    查看在线用户列表。
+HELP);
+
+    return 1;
+}
