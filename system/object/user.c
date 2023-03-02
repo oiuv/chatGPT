@@ -52,6 +52,7 @@ mixed process_input(string verb)
     string *word = explode(verb, " ");
     mapping alias = ([
         "say":"chat",
+        "exit":"quit",
     ]);
 
     // verb = lower_case(verb);

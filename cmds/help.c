@@ -5,6 +5,7 @@ int main(object me, string arg)
     if (!arg)
     {
         write(read_file(MOTD));
+        write(read_file("tips.md"));
     }
     else if (file_size(file = "/cmds/" + arg + ".c") > 0)
     {

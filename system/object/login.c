@@ -36,6 +36,7 @@ void setup(string id)
 void login()
 {
     write(read_file(MOTD));
+    write(read_file("tips.md"));
     write("\n");
     write(HBRED "提问之前请先给自己起个有趣的昵称：" NOR);
     input_to("setup");
