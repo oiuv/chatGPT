@@ -9,9 +9,9 @@
 
 > chatGPT MUD聊天室版(bbs.mud.ren)
 
-直接发言提问，要求描述长度至少5个字符，问题和回答所有人可见
+直接发言提问，和chatGPT的会话内容仅自己可见
 
-如果你只是和其它网友聊天而不想向chatGPT提问，请输入`chat 聊天内容`
+如果你要和在线网友聊天而不是和chatGPT会话，请输入`chat 聊天内容`
 
 ----
 
@@ -54,7 +54,7 @@ driver config.cfg
 
 ### 提问
 
-输入昵称登录后发文字可以直接向chatGPT提问，为避免浪费额度限制超过9个字的内容才发送给chatGPT。
+输入昵称登录后发文字可以直接向chatGPT提问，为避免浪费额度限制超过2个字的内容才发送给chatGPT。
 
 > chatGPT回复的内容会自动备份到 `log/chatGPT.md` 中
 
