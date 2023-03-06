@@ -1,4 +1,4 @@
 *.log
 cert.*
-driver.*
+driver*
 OPENAI_API_KEY
