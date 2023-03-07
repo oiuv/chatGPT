@@ -105,9 +105,10 @@ void heart_beat()
     }
 }
 
+/** 使用OPENAI CLI的接口
 // 根据config.cfg中external_cmd_x指定
 #define OPENAI_CMD 3
-//todo 上下文角色处理
+
 int prompt(string prompt)
 {
     // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
@@ -139,7 +140,7 @@ int prompt(string prompt)
 
     return 1;
 }
-/**
+
 protected void response(string result)
 {
     string arg = HIG "『chatGPT』" NOR + result + "\n";
@@ -177,7 +178,7 @@ int chat(string prompt)
     // 缓存问题
     Prompt = prompt;
     // 显示问题
-    write(HIG "『你』💬 " NOR HIC + prompt + NOR "\n");
+    write(HIG "『 你 』💬 " NOR HIC + prompt + NOR "\n");
     // 为了安全，记录提问信息
     write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
     // store prior responses
@@ -200,7 +201,7 @@ protected void response(string result)
 {
     mixed data = json_decode(result);
     string content = data["choices"][0]["message"]["content"];
-    string arg = HIG "『chatGPT』" NOR + content + "\n" + sprintf("usage: %O\n", data["usage"]);
+    string arg = HIG "『chatGPT』" NOR + content + "\n";
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
     tell_object(this_object(), arg + tips);
