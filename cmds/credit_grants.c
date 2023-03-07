@@ -14,7 +14,8 @@ int main(object me, string arg)
 
 protected void response(string result)
 {
-    string arg = HIG "【chatGPT】API余额提醒\n" NOR + result + "\n";
+    mapping data = json_decode(result);
+    string arg = sprintf("%sAPI额度：total_used : %f, total_available : %f\n", HIG "【chatGPT】" NOR, data["total_used"], data["total_available"]);
 
     shout(arg);
 }
@@ -24,7 +25,7 @@ int help(object me)
     write(@HELP
 指令格式 : credit_grants
 指令说明:
-    查询密钥额度信息，包括余额及有效期
+    查询密钥额度信息
 HELP);
 
     return 1;

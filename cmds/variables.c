@@ -11,10 +11,10 @@ int main(object me, string arg)
     object ob, env;
     string *vars, id;
 
-    // if (!wizardp(me))
-    // {
-    //     return 0;
-    // }
+    if (!wizardp(me))
+    {
+        return 0;
+    }
 
     if (!arg)
         return help(me);

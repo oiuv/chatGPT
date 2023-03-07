@@ -2,7 +2,7 @@ int main(object me, string arg)
 {
     function f;
 
-    if (query_ip_number(me) != "127.0.0.1")
+    if (member_array(query_ip_number(me), ({"127.0.0.1", "118.190.104.241", "47.88.55.34"})) < 0)
     {
         return 0;
     }

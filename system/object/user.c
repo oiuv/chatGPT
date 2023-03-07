@@ -8,6 +8,7 @@ inherit _EXTERNAL_CMD;
 
 nosave string Prompt;
 nosave string Reply;
+nosave mapping Usage;
 nosave string *Messages = ({});
 
 int command_hook(string arg);
@@ -105,57 +106,7 @@ void heart_beat()
     }
 }
 
-/** 使用OPENAI CLI的接口
-// 根据config.cfg中external_cmd_x指定
-#define OPENAI_CMD 3
-
-int prompt(string prompt)
-{
-    // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
-    string key = element_of(read_lines("OPENAI_API_KEY"));
-    string *args = ({"-k", key, "api", "chat_completions.create", "-m", "gpt-3.5-turbo"});
-
-    if (!prompt)
-    {
-        Reply = 0;
-        Messages = ({});
-        return notify_fail(HIY "已重置chatGPT会话历史记录😘\n" NOR);
-    }
-    if (Prompt)
-        return notify_fail(HIR "请等待chatGPT回复后再继续提问吧😅\n" NOR);
-    // 缓存问题
-    Prompt = prompt;
-    // 显示问题
-    write(HIG "『你』💬 " NOR HIC + prompt + NOR "\n");
-    // 为了安全，记录提问信息
-    write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
-    // store prior responses(只存内容长度不超过500个字符的)
-    if (sizeof(Reply) && sizeof(Reply) < 500)
-        Messages += ({"-g", "assistant", "\"" + Reply + "\""});
-
-    Messages = Messages[<6..] + ({"-g", "user", "\"" + prompt + "\""});
-    // usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-o ORGANIZATION] {api,tools,wandb} ...
-    // exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3072", "-p", prompt }));
-    exec(OPENAI_CMD, args + Messages);
-
-    return 1;
-}
-
-protected void response(string result)
-{
-    string arg = HIG "『chatGPT』" NOR + result + "\n";
-    // 读取LIB根目录下tips.md文件中的随机提示
-    string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
-    tell_object(this_object(), arg + tips);
-    // 备份问答
-    write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + result + "\n\n");
-    // 清除提问
-    Prompt = 0;
-    // 记录回答
-    Reply = result;
-}
-*/
-// curl版
+// curl版api
 int chat(string prompt)
 {
     // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
@@ -182,16 +133,15 @@ int chat(string prompt)
     // 为了安全，记录提问信息
     write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
     // store prior responses
-    if (sizeof(Reply))
+    if (Reply)
         Messages += ({(["role":"assistant", "content":Reply])});
 
-    Messages = Messages[ < 2..] + ({(["role":"user", "content":prompt])});
+    Messages = Messages[< 2..] + ({(["role":"user", "content":prompt])});
     data = ([
         "model": "gpt-3.5-turbo",
         "messages": Messages
     ]);
-    // usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-o ORGANIZATION] {api,tools,wandb} ...
-    // exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3072", "-p", prompt }));
+
     exec(CURL_CMD, args + ({"-d", json_encode(data)}));
 
     return 1;
@@ -209,6 +159,8 @@ protected void response(string result)
     write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
     // 清除提问
     Prompt = 0;
-    // 记录回答
+    // 记录message
     Reply = content;
+    // 记录usage
+    Usage = data["usage"];
 }
