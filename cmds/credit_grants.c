@@ -7,7 +7,7 @@ int main(object me, string arg)
     string key = element_of(read_lines("OPENAI_API_KEY"));
     if (__ARCH__ == "Microsoft Windows")
         CURL_CMD = 2;
-    exec(CURL_CMD, ({"-s", "https://api.openai.com/dashboard/billing/credit_grants", "--header", "\"Authorization: Bearer " + key + "\""}));
+    exec(CURL_CMD, ({"-s", "https://api.openai.com/dashboard/billing/credit_grants", "--header", "Authorization: Bearer " + key}));
 
     return 1;
 }

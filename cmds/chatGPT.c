@@ -1,7 +1,7 @@
 int main(object me, string arg)
 {
     // 直接向chatGPT提问
-    return me->prompt(arg);
+    return me->chat(arg);
 }
 
 int help(object me)

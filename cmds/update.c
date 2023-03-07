@@ -6,11 +6,6 @@ int main(object me, string file)
 {
     object obj;
 
-    if (!wizardp(me))
-    {
-        return 0;
-    }
-
     if (!file)
     {
         return help(me);

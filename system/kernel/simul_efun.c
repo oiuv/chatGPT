@@ -1,4 +1,5 @@
 #include <ansi.h>
+#include "simul_efun/json.c"
 
 // debug_message 随机彩色版，方便调试
 void debug(mixed arg)

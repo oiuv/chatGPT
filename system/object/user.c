@@ -128,16 +128,55 @@ int prompt(string prompt)
     write(HIG "『你』💬 " NOR HIC + prompt + NOR "\n");
     // 为了安全，记录提问信息
     write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
-    // store prior responses
-    if (sizeof(Messages) < 30 && sizeof(Reply) && sizeof(Reply) < 1000)
+    // store prior responses(只存内容长度不超过500个字符的)
+    if (sizeof(Reply) && sizeof(Reply) < 500)
         Messages += ({"-g", "assistant", "\"" + Reply + "\""});
-    else
-        Messages = ({});
 
-    Messages += ({"-g", "user", "\"" + prompt + "\""});
+    Messages = Messages[<6..] + ({"-g", "user", "\"" + prompt + "\""});
     // usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-o ORGANIZATION] {api,tools,wandb} ...
     // exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3072", "-p", prompt }));
     exec(OPENAI_CMD, args + Messages);
+
+    return 1;
+}
+// curl版
+int chat(string prompt)
+{
+    // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
+    string key = element_of(read_lines("OPENAI_API_KEY"));
+    string *args = ({"-s", "https://api.openai.com/v1/chat/completions", "-H", "Content-Type: application/json", "-H", "Authorization: Bearer " + key});
+    int CURL_CMD = 1;
+    mapping data;
+
+    if (__ARCH__ == "Microsoft Windows")
+        CURL_CMD = 2;
+
+    if (!prompt)
+    {
+        Reply = 0;
+        Messages = ({});
+        return notify_fail(HIY "已重置chatGPT会话历史记录😘\n" NOR);
+    }
+    if (Prompt)
+        return notify_fail(HIR "请等待chatGPT回复后再继续提问吧😅\n" NOR);
+    // 缓存问题
+    Prompt = prompt;
+    // 显示问题
+    write(HIG "『你』💬 " NOR HIC + prompt + NOR "\n");
+    // 为了安全，记录提问信息
+    write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
+    // store prior responses
+    data = ([
+        "model": "gpt-3.5-turbo",
+        "messages": ({
+            (["role": "user", "content": prompt]),
+        })
+    ]);
+
+    Messages = ({"-d", json_encode(data)});
+    // usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-o ORGANIZATION] {api,tools,wandb} ...
+    // exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3072", "-p", prompt }));
+    exec(CURL_CMD, args + Messages);
 
     return 1;
 }
