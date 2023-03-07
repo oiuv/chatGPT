@@ -139,6 +139,21 @@ int prompt(string prompt)
 
     return 1;
 }
+/**
+protected void response(string result)
+{
+    string arg = HIG "『chatGPT』" NOR + result + "\n";
+    // 读取LIB根目录下tips.md文件中的随机提示
+    string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
+    tell_object(this_object(), arg + tips);
+    // 备份问答
+    write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + result + "\n\n");
+    // 清除提问
+    Prompt = 0;
+    // 记录回答
+    Reply = result;
+}
+*/
 // curl版
 int chat(string prompt)
 {
@@ -183,7 +198,8 @@ int chat(string prompt)
 
 protected void response(string result)
 {
-    string arg = HIG "『chatGPT』" NOR + result + "\n";
+    mixed data = json_decode(result);
+    string arg = HIG "『chatGPT』" NOR + sprintf("%O", data) + "\n";
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
     tell_object(this_object(), arg + tips);
