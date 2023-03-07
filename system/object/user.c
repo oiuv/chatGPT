@@ -98,7 +98,7 @@ void net_dead()
 
 void heart_beat()
 {
-    if (query_idle(this_user()) > 1800)
+    if (!wizardp(this_user()) && (query_idle(this_user()) > 1800))
     {
         write(HIR "💔 ~Bye~ 因超过半小时不活跃，你自动离线了……\n" NOR);
         say(HIR "💔 ~Bye~ 用户(" + geteuid() + ")因发呆时间过长自动离线了……\n" NOR);
