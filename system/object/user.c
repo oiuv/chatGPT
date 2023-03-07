@@ -181,17 +181,17 @@ int chat(string prompt)
     // 为了安全，记录提问信息
     write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
     // store prior responses
+    if (sizeof(Reply) && sizeof(Reply) < 500)
+        Messages += ({(["role":"assistant", "content":Reply])});
+
+    Messages = Messages[ < 2..] + ({(["role":"user", "content":prompt])});
     data = ([
         "model": "gpt-3.5-turbo",
-        "messages": ({
-            (["role": "user", "content": prompt]),
-        })
+        "messages": Messages
     ]);
-
-    Messages = ({"-d", json_encode(data)});
     // usage: openai [-h] [-v] [-b API_BASE] [-k API_KEY] [-o ORGANIZATION] {api,tools,wandb} ...
     // exec(OPENAI_CMD, ({"-k", key, "api", "completions.create", "-m", "text-davinci-003", "-M", "3072", "-p", prompt }));
-    exec(CURL_CMD, args + Messages);
+    exec(CURL_CMD, args + ({"-d", json_encode(data)}));
 
     return 1;
 }
@@ -199,14 +199,15 @@ int chat(string prompt)
 protected void response(string result)
 {
     mixed data = json_decode(result);
-    string arg = HIG "『chatGPT』" NOR + sprintf("%O", data) + "\n";
+    string content = data["choices"][0]["message"]["content"];
+    string arg = HIG "『chatGPT』" NOR + content + "\n";
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
     tell_object(this_object(), arg + tips);
     // 备份问答
-    write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + result + "\n\n");
+    write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
     // 清除提问
     Prompt = 0;
     // 记录回答
-    Reply = result;
+    Reply = content;
 }
