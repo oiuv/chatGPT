@@ -133,7 +133,7 @@ int chat(string prompt)
     // 为了安全，记录提问信息
     write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
     // store prior responses
-    if (Reply)
+    if (sizeof(Reply))
         Messages += ({(["role":"assistant", "content":Reply])});
 
     Messages = Messages[< 2..] + ({(["role":"user", "content":prompt])});
@@ -149,12 +149,27 @@ int chat(string prompt)
 
 protected void response(string result)
 {
-    mixed data = json_decode(result);
-    string content = data["choices"][0]["message"]["content"];
-    string arg = HIG "『chatGPT』" NOR + content + "\n";
+    mixed data = ([]);
+    string content = result, msg;
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
-    tell_object(this_object(), arg + tips);
+
+    if (member_array('{', result) != -1)
+    {
+        data = json_decode(result);
+    }
+    if (data["error"])
+    {
+        content = data["error"]["message"];
+    }
+    else if (data["choices"])
+    {
+        content = data["choices"][0]["message"]["content"];
+    }
+
+    msg = HIG "『chatGPT』" NOR + content + "\n";
+
+    tell_object(this_object(), msg + tips);
     // 备份问答
     write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
     // 清除提问
