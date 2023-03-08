@@ -9,13 +9,15 @@
 
 > chatGPT MUD聊天室版(bbs.mud.ren)
 
-直接发言提问，和chatGPT的会话内容仅自己可见
+直接发言提问，**和chatGPT的会话内容仅自己可见**
 
 如果你要和在线网友聊天而不是和chatGPT会话，请输入`chat 聊天内容`
 
 ----
 
 本项目使用LPC语言开发，前端功能使用[xterm.js](https://github.com/xtermjs/xterm.js)实现，样式使用[bulma](https://github.com/jgthms/bulma)框架。
+
+> 因为2023年3月1日开放gpt-3.5的API后接口国内无法访问，请使用魔法突破封印
 
 ![mudGPT](https://oss.mud.ren/images/mudGPT.png)
 
@@ -45,13 +47,33 @@ pip install openai
 
 ## 启动项目
 
-使用[FluffOS](https://github.com/fluffos/fluffos)驱动运行项目，注意使用最新版（需用到 `external_start` 函数）
+> 经测试截止2月底的FLuffOS驱动在Windows系统下存在BUG，所以请使用Ubuntu系统
+
+使用[FluffOS](https://github.com/fluffos/fluffos)驱动运行项目
+
+1. 第一次请运行`build.sh`脚本编译驱动
 
 ```bash
-driver config.cfg
+./build.sh
 ```
 
-> 经测试截止2月底的FLuffOS驱动在Windows系统下存在BUG，所以请使用Ubuntu系统
+如果编译报错，请运行以下指令安装必要的依赖
+
+```bash
+sudo apt update
+sudo apt install git bison libjemalloc-dev zlib1g-dev libssl-dev libmysqlclient-dev libsqlite3-dev libpcre3-dev libevent-dev libicu-dev libdw-dev binutils-dev gcc g++ autoconf automake cmake python3 -y
+```
+
+2. 运行`run.sh`脚本启动服务
+
+```bash
+./run.sh
+```
+
+3. 客户端连接
+
+- 浏览器访问：http://127.0.0.1:8080
+- 客户端访问：telnet 127.0.0.1 6666
 
 ## 使用说明
 

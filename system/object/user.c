@@ -154,7 +154,7 @@ protected void response(string result)
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
 
-    if (member_array('{', result) != -1)
+    if (pcre_match(result, "^{.+}$"))
     {
         data = json_decode(result);
     }

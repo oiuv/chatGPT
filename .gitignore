@@ -1,4 +1,5 @@
 *.log
 cert.*
 driver*
+fluffos*
 OPENAI_API_KEY
