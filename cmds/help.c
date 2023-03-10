@@ -12,6 +12,10 @@ int main(object me, string arg)
         notify_fail("有这个指令存在，但是并没有详细的说明文件。\n");
         return file->help();
     }
+    else
+    {
+        return notify_fail("没有这个指令，找不到帮助信息 😭\n");
+    }
 
     return 1;
 }

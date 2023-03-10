@@ -81,6 +81,14 @@ sudo apt install git bison libjemalloc-dev zlib1g-dev libssl-dev libmysqlclient-
 
 输入昵称登录后发文字可以直接向chatGPT提问，为避免浪费额度限制超过2个字的内容才发送给chatGPT。
 
+如果你需要为chatGPT指定角色定位，请使用`setGPT`指令（区分大小定），如：
+
+    setGPT 你来充当翻译家，你的目标是把任何语言翻译成中文
+
+注意：如果直接输入`setGPT`或`setGPT -d`则取消对chatGPT的角色限制。
+
+默认会话有上下文关联，如果你要发起新的会话，可以输入`chatGPT -d`重置会话。
+
 > chatGPT回复的内容会自动备份到 `log/chatGPT.md` 中
 
 ### 聊天

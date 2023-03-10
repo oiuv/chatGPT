@@ -6,10 +6,16 @@ inherit _EXTERNAL_CMD;
 #define CHAT_CMD "/cmds/chat"
 #define CHATGPT_CMD "/cmds/chatGPT"
 
+// chatGPT的角色
+nosave string Role;
+// 用户发送提示内容
 nosave string Prompt;
+// chatGPT回复内容
 nosave string Reply;
+// 当前会话的Usage
 nosave mapping Usage;
-nosave string *Messages = ({});
+// 会话消息内容
+nosave mixed *Messages = ({});
 
 int command_hook(string arg);
 
@@ -24,6 +30,7 @@ varargs void create(string id)
         set_heart_beat(60);
         move_object(VOID_OB);
         say(HIG "🥰 ~Hi~ 用户(" + id + ")连线了^_^\n" NOR);
+        say(HIC "提示：你可以使用 `chat` 指令和其他用户聊天，如：chat 大家好呀~\n" NOR);
     }
 }
 
@@ -58,8 +65,10 @@ mixed process_input(string verb)
 {
     string *word = explode(verb, " ");
     mapping alias = ([
-        "say":"chat",
-        "exit":"quit",
+        "say"  : "chat",
+        "exit" : "quit",
+        "set"  : "setGPT",
+        "gpt"  : "chatGPT"
     ]);
 
     // verb = lower_case(verb);
@@ -120,9 +129,17 @@ int chat(string prompt)
 
     if (!prompt)
     {
+        write(HBYEL "chatGPT Usage" NOR "\n");
+        printf("角色描述：%s\n", Role || "未设定chatGPT的身份");
+        printf("历史消息：%O\n", Messages);
+        printf("令牌信息：%O\n", Usage);
+        return 1;
+    }
+    else if (prompt == "-d")
+    {
         Reply = 0;
         Messages = ({});
-        return notify_fail(HIY "已重置chatGPT会话历史记录😘\n" NOR);
+        return notify_fail(HIY "已清除chatGPT上下文会话记录😘\n" NOR);
     }
     if (Prompt)
         return notify_fail(HIR "请等待chatGPT回复后再继续提问吧😅\n" NOR);
@@ -135,8 +152,14 @@ int chat(string prompt)
     // store prior responses
     if (sizeof(Reply))
         Messages += ({(["role":"assistant", "content":Reply])});
-
+    // 关联最近1条会话
     Messages = Messages[< 2..] + ({(["role":"user", "content":prompt])});
+    // 设置chatGPT的角色
+    if (sizeof(Role))
+    {
+        Messages = ({(["role":"system", "content":Role])}) + Messages;
+    }
+
     data = ([
         "model": "gpt-3.5-turbo",
         "messages": Messages
@@ -178,4 +201,16 @@ protected void response(string result)
     Reply = content;
     // 记录usage
     Usage = data["usage"];
+}
+
+int setGPT(string role)
+{
+    Role = role;
+    if (role == "-d")
+    {
+        Role = 0;
+    }
+
+    write(HIC "已设置chatGPT的角色描述为：" + (Role || "空") + NOR "\n");
+    return 1;
 }
