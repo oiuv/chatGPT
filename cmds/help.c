@@ -1,3 +1,5 @@
+#include <ansi.h>
+
 int main(object me, string arg)
 {
     string file;
@@ -6,6 +8,11 @@ int main(object me, string arg)
     {
         write(read_file(MOTD));
         write(read_file("tips.md"));
+        return notify_fail(HIC "\n> 如需chatGPT使用的更多帮助请输入：" HIY "help tutorial\n" NOR);
+    }
+    else if(arg == "tutorial")
+    {
+        write(read_file("tutorial.md"));
     }
     else if (file_size(file = "/cmds/" + arg + ".c") > 0)
     {

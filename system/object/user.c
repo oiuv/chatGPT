@@ -3,8 +3,6 @@ inherit _EXTERNAL_CMD;
 #include <ansi.h>
 
 #define CMD_PATH "/cmds/"
-#define CHAT_CMD "/cmds/chat"
-#define CHATGPT_CMD "/cmds/chatGPT"
 
 // chatGPT的角色
 nosave string Role;
@@ -17,6 +15,7 @@ nosave mapping Usage;
 // 会话消息内容
 nosave mixed *Messages = ({});
 
+int chat(string prompt);
 int command_hook(string arg);
 
 varargs void create(string id)
@@ -49,15 +48,8 @@ int command_hook(string arg)
     {
         // 没有匹配到指令的转为聊天或提问
         string prompt = query_verb() + (arg ? " " + arg : "");
-        if (strlen(prompt) < 2)
-        {
-            CHAT_CMD->main(this_object(), prompt);
-            return notify_fail(HIW "【提示】为节省资源，少于2个字符的内容不发送给chatGPT\n" NOR, );
-        }
-        else
-        {
-            return CHATGPT_CMD->main(this_object(), prompt);
-        }
+        // 没有匹配到指令的转为会话
+        return chat(prompt);
     }
 }
 
@@ -107,9 +99,9 @@ void net_dead()
 
 void heart_beat()
 {
-    if (!wizardp(this_user()) && (query_idle(this_user()) > 1800))
+    if (!wizardp(this_user()) && (query_idle(this_user()) > 3600))
     {
-        write(HIR "💔 ~Bye~ 因超过半小时不活跃，你自动离线了……\n" NOR);
+        write(HIR "💔 ~Bye~ 因超过1小时不活跃，你自动离线了……\n" NOR);
         say(HIR "💔 ~Bye~ 用户(" + geteuid() + ")因发呆时间过长自动离线了……\n" NOR);
         destruct();
     }
@@ -137,9 +129,10 @@ int chat(string prompt)
     }
     else if (prompt == "-d")
     {
+        Role = 0;
         Reply = 0;
         Messages = ({});
-        return notify_fail(HIY "已清除chatGPT上下文会话记录😘\n" NOR);
+        return notify_fail(HIY "已清除chatGPT角色设定和上下文会话记录😘\n" NOR);
     }
     if (Prompt)
         return notify_fail(HIR "请等待chatGPT回复后再继续提问吧😅\n" NOR);
@@ -211,6 +204,6 @@ int setGPT(string role)
         Role = 0;
     }
 
-    write(HIC "已设置chatGPT的角色描述为：" + (Role || "空") + NOR "\n");
+    write(HIC "🤖 已设置chatGPT的角色描述为：" + (Role || "空") + NOR "\n");
     return 1;
 }

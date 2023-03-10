@@ -79,7 +79,7 @@ sudo apt install git bison libjemalloc-dev zlib1g-dev libssl-dev libmysqlclient-
 
 ### 提问
 
-输入昵称登录后发文字可以直接向chatGPT提问，为避免浪费额度限制超过2个字的内容才发送给chatGPT。
+输入昵称登录后发文字可以直接向chatGPT提问。
 
 如果你需要为chatGPT指定角色定位，请使用`setGPT`指令（区分大小定），如：
 
