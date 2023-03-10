@@ -88,7 +88,7 @@ mixed process_input(string verb)
         }
     }
 
-    return verb;
+    return trim(verb);
 }
 
 void net_dead()
@@ -123,7 +123,8 @@ int chat(string prompt)
     {
         write(HBYEL "chatGPT Usage" NOR "\n");
         printf("角色描述：%s\n", Role || "未设定chatGPT的身份");
-        printf("历史消息：%O\n", Messages);
+        printf("会话记录：%O\n", Messages);
+        printf("最新消息：%O\n", Reply);
         printf("令牌信息：%O\n", Usage);
         return 1;
     }
@@ -204,6 +205,7 @@ int setGPT(string role)
         Role = 0;
     }
 
-    write(HIC "🤖 已设置chatGPT的角色描述为：" + (Role || "空") + NOR "\n");
+    write(HIC "🤖 已设置chatGPT的角色描述为：" HIY + (Role || "空") + NOR "\n");
+    write(CYN "🤖 请发送消息给chatGPT开始神奇的会话之旅吧\n" NOR);
     return 1;
 }
