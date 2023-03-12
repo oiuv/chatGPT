@@ -15,6 +15,9 @@ nosave mapping Usage;
 // 会话消息内容
 nosave mixed *Messages = ({});
 
+nosave int AtTime;
+nosave int UserCommand;
+
 int chat(string prompt);
 int command_hook(string arg);
 
@@ -53,6 +56,28 @@ int command_hook(string arg)
     }
 }
 
+int reject_command()
+{
+    int t;
+
+    if (wizardp(this_object()))
+        return 0;
+    // 限制每10秒指令数
+    t = time() / 10;
+    if (AtTime != t)
+    {
+        AtTime = t;
+        UserCommand = 1;
+    }
+    else
+        UserCommand++;
+    // 限制最多2条指令
+    if (UserCommand > 2)
+        return 1;
+
+    return 0;
+}
+
 mixed process_input(string verb)
 {
     string *word = explode(verb, " ");
@@ -64,6 +89,11 @@ mixed process_input(string verb)
     ]);
 
     // verb = lower_case(verb);
+    if (reject_command())
+    {
+        write("服务器负载过高，请稍等几秒再发送……\n");
+        return "";
+    }
 
     switch (verb[0])
     {
