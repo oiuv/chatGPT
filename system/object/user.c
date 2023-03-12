@@ -71,8 +71,8 @@ int reject_command()
     }
     else
         UserCommand++;
-    // 限制最多2条指令
-    if (UserCommand > 2)
+    // 限制最多3条指令
+    if (UserCommand > 3)
         return 1;
 
     return 0;
@@ -92,7 +92,7 @@ mixed process_input(string verb)
     if (reject_command())
     {
         write("服务器负载过高，请稍等几秒再发送……\n");
-        return "";
+        return 1;
     }
 
     switch (verb[0])
