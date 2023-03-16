@@ -52,6 +52,7 @@ int command_hook(string arg)
         // 没有匹配到指令的转为聊天或提问
         string prompt = query_verb() + (arg ? " " + arg : "");
         // 没有匹配到指令的转为会话
+        write(YEL "🤖 为了让chatGPT更懂你，建议问题和需求描述的详细一些。\n" NOR);
         return chat(prompt);
     }
 }
@@ -71,8 +72,8 @@ int reject_command()
     }
     else
         UserCommand++;
-    // 限制最多3条指令
-    if (UserCommand > 3)
+    // 限制最多2条指令
+    if (UserCommand > 2)
         return 1;
 
     return 0;
@@ -91,7 +92,7 @@ mixed process_input(string verb)
     // verb = lower_case(verb);
     if (reject_command())
     {
-        write("服务器负载过高，请稍等几秒再发送……\n");
+        write(RED "⚠️ 服务器负载过高，请稍等几秒再发送……\n" NOR);
         return 1;
     }
 
@@ -106,7 +107,7 @@ mixed process_input(string verb)
     if (sizeof(word))
     {
         // 长内容直接转为提问
-        if (sizeof(word[0]) > 15)
+        if (sizeof(word[0]) > 15 || (strsrch(word[0], "#") != -1))
         {
             return "chatGPT " + verb;
         }
