@@ -2,4 +2,5 @@
 cert.*
 driver*
 fluffos*
+denied_ips*
 OPENAI_API_KEY

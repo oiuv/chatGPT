@@ -5,6 +5,10 @@
 #define VOID_OB "/system/object/void"
 
 #define MOTD "/system/etc/MOTD" + random(3)
+// 限制访问IP列表
+#define DENIED_IPS "denied_ips.txt"
+// OPENAI API密钥列表
+#define OPENAI_API_KEY "OPENAI_API_KEY"
 
 #define LOG_DIR "/log/"
 

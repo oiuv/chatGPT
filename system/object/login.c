@@ -33,11 +33,21 @@ void setup(string id)
     }
 }
 
+int checkDenied()
+{
+    return member_array(query_ip_number() ,read_lines(DENIED_IPS)) != -1;
+}
+
 void login()
 {
     write(read_file(MOTD));
     write(read_file("tips.md"));
     write("\n");
+    if (checkDenied())
+    {
+        write(HBRED "🈲 对不起，您的IP已被禁止访问 💔" NOR);
+        destruct();
+    }
     write(HBRED "提问之前请先给自己起个有趣的昵称：" NOR);
     input_to("setup");
 }
