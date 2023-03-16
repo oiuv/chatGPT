@@ -1,5 +1,22 @@
+int check(string arg)
+{
+    string *keywords = ({"你是", "你充当", "你担任", "你扮演", "你成为", "你做"});
+    foreach (string key in keywords)
+    {
+        if (strsrch(arg, key) > -1)
+            return 1;
+    }
+
+    return 0;
+}
+
 int main(object me, string arg)
 {
+    if (arg && check(arg[0..10]))
+    {
+        me->setGPT(arg);
+    }
+
     // 直接向chatGPT提问
     return me->chat(arg);
 }

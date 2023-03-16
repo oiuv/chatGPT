@@ -52,7 +52,7 @@ int command_hook(string arg)
         // 没有匹配到指令的转为聊天或提问
         string prompt = query_verb() + (arg ? " " + arg : "");
         // 没有匹配到指令的转为会话
-        write(YEL "🤖 为了让chatGPT更懂你，建议问题和需求描述的详细一些。\n" NOR);
+        write(YEL "🤖 为了让chatGPT更懂你，建议尽可能详细地描述问题和需求~\n" NOR);
         return chat(prompt);
     }
 }
