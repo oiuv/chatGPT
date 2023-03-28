@@ -226,6 +226,8 @@ protected void response(string result)
     Reply = content;
     // 记录usage
     Usage = data["usage"];
+    // 让聊天室更有气氛
+    say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
 }
 
 int setGPT(string role)

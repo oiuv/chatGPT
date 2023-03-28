@@ -15,7 +15,7 @@ int main(object me, string arg)
 protected void response(string result)
 {
     mapping data = json_decode(result);
-    string arg = sprintf("%sAPI额度：total_used : %f, total_available : %f\n", HIG "【chatGPT】" NOR, data["total_used"], data["total_available"]);
+    string arg = sprintf("%sAPI额度：total_used : $%.2f, total_available : $%.2f\n", HIG "【chatGPT】" NOR, data["total_used"], data["total_available"]);
 
     shout(arg);
 }
