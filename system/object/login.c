@@ -10,7 +10,7 @@ void setup(string id)
         write(HIY "\n⚠️ 昵称不能包含特殊符号且长度要求为2-8位\n请重新输入昵称：" NOR);
         input_to("setup");
     }
-    else if (member_array(lower_case(id), read_lines("SensitiveWords.txt")) != -1)
+    else if (member_array(lower_case(id), read_lines(SENSITIVEWORDS)) != -1)
     {
         write(HIR "\n🈲 此昵称为本站禁止使用的敏感词汇\n请重新输入昵称：" NOR);
         input_to("setup");
