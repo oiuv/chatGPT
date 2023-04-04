@@ -1,5 +1,6 @@
 *.log
 cert.*
+config.json
 driver*
 fluffos*
 denied_ips*

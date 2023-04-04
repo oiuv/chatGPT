@@ -141,8 +141,8 @@ void heart_beat()
 // curl版api
 int chat(string prompt)
 {
-    // 读取LIB根目录下的OPENAI_API_KEY文件中配置的随机密钥
-    string key = element_of(read_lines("OPENAI_API_KEY"));
+    // 读取LIB根目录下的config.json文件中配置的随机密钥
+    string key = element_of(json_decode(read_file("config.json"))["openai_api_keys"]);
     string *args = ({"-s", "https://api.openai.com/v1/chat/completions", "-H", "Content-Type: application/json", "-H", "Authorization: Bearer " + key});
     int CURL_CMD = 1;
     mapping data;
@@ -177,9 +177,11 @@ int chat(string prompt)
     // store prior responses
     if (sizeof(Reply))
         Messages += ({(["role":"assistant", "content":Reply])});
-    // 关联最近1条会话
-    Messages = Messages[< 2..] + ({(["role":"user", "content":prompt])});
+    // 关联最近N/2条会话
+    // todo 这里可以增加total_tokens判断避免超过上限，但4条内容大概率不会超，暂不判断
+    Messages = Messages[< 8..] + ({(["role":"user", "content":prompt])});
     // 设置chatGPT的角色
+    // todo 这里应该判断避免最初会话重复增加system角色，但因为重复没什么影响，暂不判断
     if (sizeof(Role))
     {
         Messages = ({(["role":"system", "content":Role])}) + Messages;

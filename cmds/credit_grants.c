@@ -4,7 +4,7 @@ inherit _EXTERNAL_CMD;
 int main(object me, string arg)
 {
     int CURL_CMD = 1;
-    string key = element_of(read_lines("OPENAI_API_KEY"));
+    string key = json_decode(read_file("config.json"))["session_key"];
     if (__ARCH__ == "Microsoft Windows")
         CURL_CMD = 2;
     exec(CURL_CMD, ({"-s", "https://api.openai.com/dashboard/billing/credit_grants", "--header", "Authorization: Bearer " + key}));
