@@ -23,7 +23,8 @@ void setup(string id)
     else
     {
         write(HIG "\n😘 欢迎来到" MUD_NAME "，请直接发言向chatGPT提问吧~\n" NOR);
-        write(HIY "\n🧡 示例" NOR "请提供10个向ChatGPT提问的示例，要求描述详细且涵盖不同类型。\n");
+        write(HIY "\n🧡 「提问示例」" NOR "请提供10个向ChatGPT提问的示例，要求问题涵盖不同领域且具有示范性。\n");
+        write(HIY "\n🧡 「功能提示」" NOR "你可以使用指令" HIC "set" NOR "指定chatGPT的能力，如 " HIC "set 3" NOR " 为翻译外语成中文。\n");
         from = this_object();
         to = new(USER_OB, id);
         exec(to, from);
