@@ -4,5 +4,8 @@
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
+    ],
+    "wizard_ip": [
+        "127.0.0.1"
     ]
 }
