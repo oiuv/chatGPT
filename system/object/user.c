@@ -92,7 +92,7 @@ mixed process_input(string verb)
     // verb = lower_case(verb);
     if (reject_command())
     {
-        write(RED "⚠️ 服务器负载过高，请稍等几秒再发送……\n" NOR);
+        write(RED "⚠️  服务器负载过高，请稍等几秒再发送……\n" NOR);
         return 1;
     }
 
@@ -178,8 +178,8 @@ int chat(string prompt)
     if (sizeof(Reply))
         Messages += ({(["role":"assistant", "content":Reply])});
     // 关联最近N/2条会话
-    // todo 这里可以增加total_tokens判断避免超过上限，但4条内容大概率不会超，暂不判断
-    Messages = Messages[< 8..] + ({(["role":"user", "content":prompt])});
+    // todo 这里可以增加total_tokens判断避免超过上限，但3条会话大概率不会超，暂不判断
+    Messages = Messages[< 6..] + ({(["role":"user", "content":prompt])});
     // 设置chatGPT的角色
     // todo 这里应该判断避免最初会话重复增加system角色，但因为重复没什么影响，暂不判断
     if (sizeof(Role))
@@ -202,7 +202,7 @@ protected void response(string result)
     mixed data = ([]);
     string content = result, msg;
     // 读取LIB根目录下tips.md文件中的随机提示
-    string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR"\n";
+    string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR "\n";
 
     if (pcre_match(result, "^{.+}$"))
     {
@@ -215,30 +215,27 @@ protected void response(string result)
     else if (data["choices"])
     {
         content = data["choices"][0]["message"]["content"];
+        // 备份问答
+        write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
+        // 记录usage
+        Usage = data["usage"];
+        // 让聊天室更有气氛
+        say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
     }
 
     msg = HIG "『chatGPT』" NOR + content + "\n";
 
     tell_object(this_object(), msg + tips);
-    // 备份问答
-    write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
+
     // 清除提问
     Prompt = 0;
     // 记录message
     Reply = content;
-    // 记录usage
-    Usage = data["usage"];
-    // 让聊天室更有气氛
-    say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
 }
 
 int setGPT(string role)
 {
     Role = role;
-    if (role == "-d")
-    {
-        Role = 0;
-    }
 
     write(HIC "🤖 已设置chatGPT的角色描述为：" HIY + (Role || "空") + NOR "\n");
     write(CYN "🤖 请发送消息给chatGPT开始神奇的会话之旅吧\n" NOR);

@@ -7,7 +7,7 @@ void setup(string id)
     id = trim(id);
     if (!pcre_match(id, "^[0-9a-zA-Z\\p{Han}]{2,8}$"))
     {
-        write(HIY "\n⚠️ 昵称不能包含特殊符号且长度要求为2-8位\n请重新输入昵称：" NOR);
+        write(HIY "\n⚠️  昵称不能包含特殊符号且长度要求为2-8位\n请重新输入昵称：" NOR);
         input_to("setup");
     }
     else if (member_array(lower_case(id), read_lines(SENSITIVEWORDS)) != -1)
@@ -56,11 +56,7 @@ void login()
 void logon()
 {
     // 延迟登陆，解决mudlet初次连接v2019编码自动识别问题
-#ifdef FLUFFOS
     call_out_walltime("login", 0.25);
-#else
-    call_out("login", 1);
-#endif
 }
 
 void net_dead()
