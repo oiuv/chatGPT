@@ -143,13 +143,15 @@ int chat(string prompt)
 {
     // 读取LIB根目录下的config.json文件中配置的随机密钥
     string key = element_of(json_decode(read_file("config.json"))["openai_api_keys"]);
+    string proxy = json_decode(read_file("config.json"))["proxy"];
     string *args = ({"-s", "https://api.openai.com/v1/chat/completions", "-H", "Content-Type: application/json", "-H", "Authorization: Bearer " + key});
     int CURL_CMD = 1;
     mapping data;
 
     if (__ARCH__ == "Microsoft Windows")
         CURL_CMD = 2;
-
+    if (proxy)
+        args += ({"-x", proxy});
     if (!prompt)
     {
         write(HBYEL "chatGPT Usage" NOR "\n");
@@ -188,11 +190,11 @@ int chat(string prompt)
     }
 
     data = ([
-        "model": "gpt-3.5-turbo",
-        "messages": Messages
+        "model"    : "gpt-3.5-turbo",
+        "messages" : Messages
     ]);
 
-    exec(CURL_CMD, args + ({"-d", json_encode(data)}));
+    external_cmd(CURL_CMD, args + ({"-d", json_encode(data)}));
 
     return 1;
 }
