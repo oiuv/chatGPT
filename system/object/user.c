@@ -183,10 +183,12 @@ int chat(string prompt)
     // todo 这里可以增加total_tokens判断避免超过上限，但3条会话大概率不会超，暂不判断
     Messages = Messages[< 6..] + ({(["role":"user", "content":prompt])});
     // 设置chatGPT的角色
-    // todo 这里应该判断避免最初会话重复增加system角色，但因为重复没什么影响，暂不判断
     if (sizeof(Role))
     {
-        Messages = ({(["role":"system", "content":Role])}) + Messages;
+        if (Messages[0]["role"] == "system")
+            Messages[0]["content"] = Role;
+        else
+            Messages = ({(["role":"system", "content":Role])}) + Messages;
     }
 
     data = ([
