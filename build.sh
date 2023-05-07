@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# 更新系统软件包列表
+sudo apt update
+# 安装软件包及依赖库
+sudo apt install git bison build-essential libjemalloc-dev zlib1g-dev libssl-dev libmysqlclient-dev libsqlite3-dev libpq-dev libpcre3-dev libevent-dev libicu-dev libdw-dev binutils-dev gcc g++ autoconf automake cmake python3 -y
+
 # 如果 fluffos 目录不存在，则从 gitee 克隆 fluffos 仓库
 if [ ! -d "fluffos" ]; then
     git clone https://gitee.com/mudren/fluffos.git
@@ -33,3 +38,6 @@ end_seconds=$(date --date="$endtime" +%s);
 echo Start: $starttime.
 echo End: $endtime.
 echo "Build Time: "$((end_seconds-start_seconds))"s."
+
+# 复制驱动至系统目录
+sodu cp bin/driver /usr/local/games/
