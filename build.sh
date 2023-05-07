@@ -40,4 +40,4 @@ echo End: $endtime.
 echo "Build Time: "$((end_seconds-start_seconds))"s."
 
 # 复制驱动至系统目录
-sodu cp bin/driver /usr/local/games/
+sudo cp bin/driver /usr/local/games/
