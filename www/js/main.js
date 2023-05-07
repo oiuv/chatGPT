@@ -34,16 +34,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const send = document.getElementById("send");
     // 按键事件
     cmd.addEventListener("keydown", (e) => {
-        switch (e.key) {
-            case "Enter":
-                sendCmd();
-                break;
-            case "ArrowUp":
-                getCmd1();
-                break;
-            case "ArrowDown":
-                getCmd2();
-                break;
+        if (e.shiftKey && e.key === "Enter") {
+            // 如果同时按下了Shift和Enter键
+            // 执行希望得到的操作，如清空指令文本框等
+            console.log("Shift + Enter pressed.");
+        } else if (e.key === "Enter") {
+            // 如果只按下了Enter键
+            e.preventDefault(); // 防止回车键产生换行
+            // 执行发送指令操作
+            sendCmd();
+        } else if (e.key === "ArrowUp") {
+            // 执行上翻操作
+            getCmd1();
+        } else if (e.key === "ArrowDown") {
+            // 执行下翻操作
+            getCmd2();
         }
     });
 
@@ -104,7 +109,8 @@ function sendCmd() {
             }
             history_index = -1;
         }
-        ws.send(cmd.value + "\n");
+        const cmdValue = cmd.value.replace(/\r?\n/g, '|CRLF|');
+        ws.send(cmdValue + "\n");
         term.write(cmd.value + "\n\r");
         cmd.value = "";
     } else {

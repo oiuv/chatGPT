@@ -57,13 +57,6 @@ pip install openai
 ./build.sh
 ```
 
-如果编译报错，请运行以下指令安装必要的依赖
-
-```bash
-sudo apt update
-sudo apt install git bison libjemalloc-dev zlib1g-dev libssl-dev libmysqlclient-dev libsqlite3-dev libpcre3-dev libevent-dev libicu-dev libdw-dev binutils-dev gcc g++ autoconf automake cmake python3 -y
-```
-
 2. 运行`run.sh`脚本启动服务
 
 ```bash

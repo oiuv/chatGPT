@@ -33,7 +33,6 @@
             font-size: medium;
             background-color: darkslategray
         }
-
     </style>
 </head>
 
@@ -45,9 +44,14 @@
         <div id="container">
             <div id="terminal"></div>
         </div>
-        <div class="field has-addons">
-            <input type="text" class="input is-link is-medium" name="cmd" id="cmd" placeholder="请在此输入内容">
-            <input type="submit" class="button is-link is-medium" onclick="sendCmd()" id="send">
+        <div class="columns is-mobile">
+            <div class="column">
+                <textarea class="textarea is-link is-focused" name="cmd" id="cmd" rows="1"
+                    placeholder="请在此输入内容，可用shift+enter换行"></textarea>
+            </div>
+            <div class="column is-narrow">
+                <input type="submit" class="button is-link is-medium" onclick="sendCmd()" id="send">
+            </div>
         </div>
     </div>
 </body>

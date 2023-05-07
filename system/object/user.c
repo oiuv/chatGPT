@@ -81,7 +81,7 @@ int reject_command()
 
 mixed process_input(string verb)
 {
-    string *word = explode(verb, " ");
+    string *word;
     mapping alias = ([
         "say"  : "chat",
         "exit" : "quit",
@@ -89,13 +89,13 @@ mixed process_input(string verb)
         "gpt"  : "chatGPT"
     ]);
 
-    // verb = lower_case(verb);
     if (reject_command())
     {
         write(RED "⚠️  服务器负载过高，请稍等几秒再发送……\n" NOR);
         return 1;
     }
 
+    verb = replace_string(verb, "|CRLF|", "\n");
     switch (verb[0])
     {
     case '@':
@@ -104,6 +104,7 @@ mixed process_input(string verb)
         return "chat " + verb[1..];
     }
 
+    word = explode(verb, " ");
     if (sizeof(word))
     {
         // 长内容直接转为提问
