@@ -142,9 +142,15 @@ void heart_beat()
 // curl版api
 int chat(string prompt)
 {
-    // 读取LIB根目录下的config.json文件中配置的随机密钥
-    string key = element_of(json_decode(read_file("config.json"))["openai_api_keys"]);
-    string proxy = json_decode(read_file("config.json"))["proxy"];
+    // 读取LIB根目录下的config.json文件中配置
+    mapping config = json_decode(read_file("config.json"));
+    // 随机密钥
+    string key = element_of(config["openai_api_keys"]);
+    // 会话历史关联条数（包括 role 和 content，所以需*2）
+    int history = config["history"] * 2 || 6;
+    //采样时使用的温度值，取值范围为0到2之间，值越大生成输出的随机性越强
+    float temperature = config["temperature"] || 1;
+    string proxy = config["proxy"];
     string *args = ({"-s", "https://api.openai.com/v1/chat/completions", "-H", "Content-Type: application/json", "-H", "Authorization: Bearer " + key});
     int CURL_CMD = 1;
     mapping data;
@@ -182,7 +188,7 @@ int chat(string prompt)
         Messages += ({(["role":"assistant", "content":Reply])});
     // 关联最近N/2条会话
     // todo 这里可以增加total_tokens判断避免超过上限，但3条会话大概率不会超，暂不判断
-    Messages = Messages[< 6..] + ({(["role":"user", "content":prompt])});
+    Messages = Messages[< history..] + ({(["role":"user", "content":prompt])});
     // 设置chatGPT的角色
     if (sizeof(Role))
     {
@@ -193,8 +199,9 @@ int chat(string prompt)
     }
 
     data = ([
-        "model"    : "gpt-3.5-turbo",
-        "messages" : Messages
+        "model"       : "gpt-3.5-turbo",
+        "temperature" : temperature,
+        "messages"    : Messages
     ]);
 
     external_cmd(CURL_CMD, args + ({"-d", json_encode(data)}));

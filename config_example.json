@@ -5,8 +5,10 @@
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
     ],
-    "proxy": "192.168.1.11:7892",
+    "proxy": "192.168.1.11:11223",
     "wizard_ip": [
         "127.0.0.1"
-    ]
+    ],
+    "history": 3,
+    "temperature": 1
 }
