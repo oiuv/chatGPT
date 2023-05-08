@@ -111,7 +111,8 @@ function sendCmd() {
         }
         const cmdValue = cmd.value.replace(/\r?\n/g, '|CRLF|');
         ws.send(cmdValue + "\n");
-        term.write(cmd.value + "\n\r");
+        // 在终端中输出输入的指令
+        // term.write(cmd.value + "\n\r");
         cmd.value = "";
     } else {
         console.log("服务器未连接！");
