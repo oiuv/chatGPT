@@ -218,6 +218,8 @@ protected void response(string result)
 
     if (pcre_match(result, "^{.+}$"))
     {
+        // 备份JSONL文件
+        write_file(LOG_DIR + "chatGPT.jsonl", result);
         data = json_decode(result);
     }
     if (data["error"])
