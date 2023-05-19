@@ -17,8 +17,8 @@ nosave mixed *Messages = ({});
 
 nosave int AtTime;
 nosave int UserCommand;
-nosave int mobile;
-nosave mapping data = ([]);
+nosave int Mobile;
+nosave mapping Data = ([]);
 
 int chat(string prompt);
 int command_hook(string arg);
@@ -65,7 +65,7 @@ int reject_command()
 
     if (wizardp(this_object()))
         return 0;
-    if (mobile)
+    if (Mobile)
         return 0;
 
     // 限制每60秒指令数
@@ -111,7 +111,12 @@ mixed process_input(string verb)
         if (word[0] != "verify" && reject_command())
         {
             write(RED "⚠️  未验证手机用户限制每分钟 3 次请求，请使用`" HIY "verify 手机号码" NOR RED "`做安全认证\n" NOR);
-            write(YEL "⚠️  完成手机验证的优势：\n1. 解除 3 RPM 的会话次数限制\n2. 保留和chatGPT的全部会话历史记录\n3. 可使用 mailto 指令下载会话记录到个人邮箱\n" NOR);
+            write(YEL "⚠️  完成手机验证的优势：\n"
+                    "   1. 解除 3 RPM 的会话次数限制\n"
+                    "   2. 可以使用更长的上下文关联(未验证只关联最近1条会话)\n"
+                    "   3. 保留和chatGPT的全部会话历史记录\n"
+                    "   4. 可使用 mailto 指令下载会话记录到个人邮箱\n"
+                NOR);
             return 1;
         }
         // 长内容直接转为提问
@@ -195,6 +200,11 @@ int chat(string prompt)
     if (sizeof(Reply))
         Messages += ({(["role":"assistant", "content":Reply])});
     // 关联最近N/2条会话
+    if (!Mobile)
+    {
+        // 未验证手机用户只关联最近一条会话
+        history = 2;
+    }
     // todo 这里可以增加total_tokens判断避免超过上限，但3条会话大概率不会超，暂不判断
     Messages = Messages[< history..] + ({(["role":"user", "content":prompt])});
     // 设置chatGPT的角色
@@ -250,10 +260,10 @@ protected void response(string result)
             // 备份问答
             write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n\n" + content + "\n\n");
         }
-        if (mobile)
+        if (Mobile)
         {
             // 用户历史消息
-            write_file(LOG_DIR + "history/" + mobile + ".txt", "> " + Prompt + "\n\n" + content + "\n\n");
+            write_file(LOG_DIR + "history/" + Mobile + ".txt", "> " + Prompt + "\n\n" + content + "\n\n");
         }
         // 记录usage
         Usage = data["usage"];
@@ -300,13 +310,13 @@ void sms(string tpl)
     {
         error("请先在config.json中配置AppCode！");
     }
-    if (data["verify_code"])
+    if (Data["verify_code"])
     {
-        tpl = "【雪风】你的验证码是：" + data["verify_code"] + "，请勿泄漏于他人！";
+        tpl = "【雪风】你的验证码是：" + Data["verify_code"] + "，请勿泄漏于他人！";
     }
-    url = "http://gwgp-wtxhytukujk.n.bdcloudapi.com/chuangxin/dxjk?content=" + tpl + "&mobile=" + data["mobile"];
+    url = "http://gwgp-wtxhytukujk.n.bdcloudapi.com/chuangxin/dxjk?content=" + tpl + "&mobile=" + Data["mobile"];
     external_cmd(CURL_CMD, ({"-s", "--location", url, "--header", "Content-Type: application/json;charset=UTF-8", "--header", "X-Bce-Signature: AppCode/" + AppCode}));
 
     // 记录日志
-    write_file(LOG_DIR "mobile", "[" + ctime() + "]" + data["mobile"] + "\t" + query_ip_number(this_object()) + "\n");
+    write_file(LOG_DIR "mobile", "[" + ctime() + "]" + Data["mobile"] + "\t" + query_ip_number(this_object()) + "\n");
 }

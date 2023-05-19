@@ -9,7 +9,7 @@ protected void response(string result)
 int main(object me, string arg)
 {
     int PYTHON_CMD = 3;
-    string mobile = fetch_variable("mobile", me);
+    string mobile = fetch_variable("Mobile", me);
 
     if (!arg)
     {

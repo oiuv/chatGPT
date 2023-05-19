@@ -25,8 +25,13 @@ void setup(string id)
         write(HIG "\n😘 欢迎来到" MUD_NAME "，请直接发言向chatGPT提问吧~\n" NOR);
         write(HIY "\n🧡 「提问示例」" NOR "请提供10个向ChatGPT提问的示例，要求问题涵盖不同领域且具有示范性。\n");
         write(HIY "\n🧡 「功能提示」" NOR "你可以使用指令" HIC "set" NOR "指定chatGPT的能力，如 " HIC "set 3" NOR " 为翻译外语成中文。\n");
-        write(RED "\n⚠️  因API余额不足，对未认证的游客用户限制每分钟 3 次请求，请使用`" HIY "verify 手机号码" NOR RED "`认证身份\n" NOR);
-        write(HIG "\n⚠️  使用手机完成验证的好处：\n1. 解除 3 RPM 的会话次数限制\n2. 保留你和chatGPT的全部会话历史记录\n3. 可使用 mailto 指令下载会话记录到个人邮箱\n" NOR);
+        write(RED "\n⚠️  因API余额不足，对未认证的游客用户限制每分钟 3 次请求，请使用`" HIY "verify 手机号码" NOR RED "`认证\n" NOR);
+        write(HIG "\n⚠️  使用手机完成验证的好处：\n"
+                    "   1. 解除 3 RPM 的会话次数限制\n"
+                    "   2. 可以使用更长的上下文关联(未验证只关联最近1条会话)\n"
+                    "   3. 保留你和chatGPT的全部会话历史记录\n"
+                    "   4. 可使用 mailto 指令下载会话历史记录到个人邮箱\n"
+            NOR);
         from = this_object();
         to = new(USER_OB, id);
         exec(to, from);

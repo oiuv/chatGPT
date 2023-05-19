@@ -2,13 +2,13 @@
 
 int main(object me, string arg)
 {
-    mapping data = fetch_variable("data", me);
+    mapping data = fetch_variable("Data", me);
     string phone = data["mobile"];
     int code = data["verify_code"];
 
     if (!arg)
     {
-        if (phone = fetch_variable("mobile", me))
+        if (phone = fetch_variable("Mobile", me))
         {
             write(HIY "你当前绑定的手机号码是：" + phone + "，如需修改请输入：verify 新号码\n" NOR);
             return 1;
@@ -23,7 +23,7 @@ int main(object me, string arg)
         {
             return notify_fail(HIR "验证码错误，请重试或重新发送！\n" NOR);
         }
-        store_variable("mobile", phone, me);
+        store_variable("Mobile", phone, me);
         write(HIG "身份认证完成，现在开始你拥有自己的会话存档了，你可以随时使用 mailto 指令获取会话存档 💟\n" NOR);
         map_delete(data, "verify_code");
         map_delete(data, "mobile");

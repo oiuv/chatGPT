@@ -9,7 +9,7 @@ int main(object me, string arg)
 {
     int PYTHON_CMD = 3;
 
-    if (!wizardp(me) && !fetch_variable("mobile", me))
+    if (!wizardp(me) && !fetch_variable("Mobile", me))
     {
         return 0;
     }
