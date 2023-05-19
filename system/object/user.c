@@ -17,6 +17,8 @@ nosave mixed *Messages = ({});
 
 nosave int AtTime;
 nosave int UserCommand;
+nosave int mobile;
+nosave mapping data = ([]);
 
 int chat(string prompt);
 int command_hook(string arg);
@@ -63,8 +65,11 @@ int reject_command()
 
     if (wizardp(this_object()))
         return 0;
-    // 限制每10秒指令数
-    t = time() / 10;
+    if (mobile)
+        return 0;
+
+    // 限制每60秒指令数
+    t = time() / 60;
     if (AtTime != t)
     {
         AtTime = t;
@@ -72,8 +77,8 @@ int reject_command()
     }
     else
         UserCommand++;
-    // 限制最多2条指令
-    if (UserCommand > 2)
+    // 限制最多3条指令
+    if (UserCommand > 3)
         return 1;
 
     return 0;
@@ -89,13 +94,6 @@ mixed process_input(string verb)
         "gpt"  : "chatGPT"
     ]);
 
-    if (reject_command())
-    {
-        write(RED "⚠️  服务器负载过高，请稍等几秒再发送……\n" NOR);
-        return 1;
-    }
-
-    verb = replace_string(verb, "|CRLF|", "\n");
     switch (verb[0])
     {
     case '@':
@@ -104,7 +102,15 @@ mixed process_input(string verb)
         return "chat " + verb[1..];
     }
 
+    verb = replace_string(verb, "|CRLF|", "\n");
     word = explode(verb, " ");
+    if (word[0] != "verify" && reject_command())
+    {
+        write(RED "⚠️  未验证手机用户限制每分钟 3 次请求，请使用`" HIY "verify 手机号码" NOR RED "`认证身份\n" NOR);
+        write(YEL "⚠️  认证身份的优势：\n1. 解除 3 RPM 的会话次数限制\n2. 保留和chatGPT的全部会话历史记录\n3. 可使用 mailto 指令下载会话记录到指定邮箱\n" NOR);
+        return 1;
+    }
+
     if (sizeof(word))
     {
         // 长内容直接转为提问
@@ -241,12 +247,26 @@ protected void response(string result)
         if (bitCheck(config("log"), LOG_A))
         {
             // 备份问答
-            write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
+            write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n\n" + content + "\n\n");
+        }
+        if (mobile)
+        {
+            // 用户历史消息
+            write_file(LOG_DIR + "history/" + mobile + ".txt", "> " + Prompt + "\n\n" + content + "\n\n");
         }
         // 记录usage
         Usage = data["usage"];
         // 让聊天室更有气氛
         say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
+    }
+    else if (data["SuccessCounts"])
+    {
+        content = "验证码信息已发送至您的手机，请注意查收 📱💟";
+    }
+
+    if (!sizeof(content))
+    {
+        content = "💤💥💢 <服务器未能正确响应请求> 💢💥💤";
     }
 
     msg = HIG "『chatGPT』" NOR + content + "\n";
@@ -266,4 +286,26 @@ int setGPT(string role)
     write(HIC "🤖 已设置chatGPT的角色描述为：" HIY + (Role || "空") + NOR "\n");
     write(CYN "🤖 请发送消息给chatGPT开始神奇的会话之旅吧\n" NOR);
     return 1;
+}
+
+// 个人认证，发送短信
+void sms(string tpl)
+{
+    int CURL_CMD = 1;
+    string url;
+    string AppCode = config("AppCode");
+
+    if (!AppCode)
+    {
+        error("请先在config.json中配置AppCode！");
+    }
+    if (data["verify_code"])
+    {
+        tpl = "【雪风】你的验证码是：" + data["verify_code"] + "，请勿泄漏于他人！";
+    }
+    url = "http://gwgp-wtxhytukujk.n.bdcloudapi.com/chuangxin/dxjk?content=" + tpl + "&mobile=" + data["mobile"];
+    external_cmd(CURL_CMD, ({"-s", "--location", url, "--header", "Content-Type: application/json;charset=UTF-8", "--header", "X-Bce-Signature: AppCode/" + AppCode}));
+
+    // 记录日志
+    write_file(LOG_DIR "mobile", "[" + ctime() + "]" + data["mobile"] + "\t" + query_ip_number(this_object()) + "\n");
 }

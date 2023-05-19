@@ -13,6 +13,7 @@
     "wizard_ip": [
         "127.0.0.1"
     ],
+    "AppCode": "xxxxxxxxxxxxxxxx",
     "log": 15,
     "history": 3,
     "temperature": 1

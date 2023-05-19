@@ -29,9 +29,11 @@ int main(object me, string arg)
 
 protected void response(string result)
 {
-    mapping data = json_decode(result);
-    string arg;
-    // debug(result);
+    mapping data = ([]);
+    string arg = result;
+
+    if (sizeof(result))
+        data = json_decode(result);
     if (data["error"])
         arg = sprintf("%serror：%s\n", HIG "【chatGPT】" NOR, data["error"]["message"]);
     else if (data["grants"])
@@ -40,8 +42,6 @@ protected void response(string result)
         arg = sprintf("%O", grants);
         arg = sprintf("%s截止 %s 额度信息：\nid : %s\n账户总额 : $%.2f\n消费额度 : $%.2f\n账户余额 : $%.2f\n生效时间 : %s\n过期时间 : %s\n", HIG "【chatGPT】" NOR, ctime(), grants["id"], data["total_granted"], data["total_used"], data["total_available"], ctime(to_int(grants["effective_at"])), ctime(to_int(grants["expires_at"])));
     }
-    else
-        arg = result;
 
     shout(arg);
 }
