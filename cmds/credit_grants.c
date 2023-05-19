@@ -4,8 +4,8 @@ inherit _EXTERNAL_CMD;
 int main(object me, string arg)
 {
     int CURL_CMD = 1;
-    string *keys = json_decode(read_file("config.json"))["session_keys"];
-    string proxy = json_decode(read_file("config.json"))["proxy"];
+    string *keys = config("session_keys");
+    string proxy = config("proxy");
     string key;
     string *cURL = ({"-s", "https://api.openai.com/dashboard/billing/credit_grants", "--header"});
 

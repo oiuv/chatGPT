@@ -142,15 +142,13 @@ void heart_beat()
 // curl版api
 int chat(string prompt)
 {
-    // 读取LIB根目录下的config.json文件中配置
-    mapping config = json_decode(read_file("config.json"));
     // 随机密钥
-    string key = element_of(config["openai_api_keys"]);
+    string key = element_of(config("openai_api_keys"));
     // 会话历史关联条数（包括 role 和 content，所以需*2）
-    int history = config["history"] * 2 || 6;
+    int history = config("history") * 2 || 6;
     //采样时使用的温度值，取值范围为0到2之间，值越大生成输出的随机性越强
-    float temperature = config["temperature"] || 1;
-    string proxy = config["proxy"];
+    float temperature = config("temperature") || 1;
+    string proxy = config("proxy");
     string *args = ({"-s", "https://api.openai.com/v1/chat/completions", "-H", "Content-Type: application/json", "-H", "Authorization: Bearer " + key});
     int CURL_CMD = 1;
     mapping data;
@@ -181,8 +179,11 @@ int chat(string prompt)
     Prompt = prompt;
     // 显示问题
     write(HIG "『 你 』💬 " NOR HIC + prompt + NOR "\n");
-    // 为了安全，记录提问信息
-    write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
+    if (bitCheck(config("log"), LOG_Q))
+    {
+        // 为了安全，记录提问信息
+        write_file(LOG_DIR + "chatGPT.log", sprintf("[%s]%-16s%-14s%s\n", ctime(), query_ip_number(), geteuid(), prompt));
+    }
     // store prior responses
     if (sizeof(Reply))
         Messages += ({(["role":"assistant", "content":Reply])});
@@ -216,10 +217,18 @@ protected void response(string result)
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR "\n";
 
+    if (bitCheck(config("log"), LOG_R))
+    {
+        // 备份问答
+        write_file(LOG_DIR + "chatGPT.txt", "> " + Prompt + "\n" + result + "\n");
+    }
     if (pcre_match(result, "^{.+}$"))
     {
-        // 备份JSONL文件
-        write_file(LOG_DIR + "chatGPT.jsonl", result);
+        if (bitCheck(config("log"), LOG_J))
+        {
+            // 备份JSONL文件
+            write_file(LOG_DIR + "chatGPT.jsonl", result);
+        }
         data = json_decode(result);
     }
     if (data["error"])
@@ -229,8 +238,11 @@ protected void response(string result)
     else if (data["choices"])
     {
         content = data["choices"][0]["message"]["content"];
-        // 备份问答
-        write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
+        if (bitCheck(config("log"), LOG_A))
+        {
+            // 备份问答
+            write_file(LOG_DIR + "chatGPT.md", "## " + Prompt + "\n" + content + "\n\n");
+        }
         // 记录usage
         Usage = data["usage"];
         // 让聊天室更有气氛
