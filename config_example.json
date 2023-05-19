@@ -1,5 +1,9 @@
 {
-    "session_key": "sess-xxxxxxxxxxxxxxxxxxxxxxxxx",
+    "session_keys": [
+        "sess-xxxxxxxxxxxxxxxxxxxxxxxx1",
+        "sess-xxxxxxxxxxxxxxxxxxxxxxxx2",
+        "sess-xxxxxxxxxxxxxxxxxxxxxxxx3"
+    ],
     "openai_api_keys": [
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx1",
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx2",
@@ -9,6 +13,7 @@
     "wizard_ip": [
         "127.0.0.1"
     ],
+    "log": 15,
     "history": 3,
     "temperature": 1
 }
