@@ -104,15 +104,16 @@ mixed process_input(string verb)
 
     verb = replace_string(verb, "|CRLF|", "\n");
     word = explode(verb, " ");
-    if (word[0] != "verify" && reject_command())
-    {
-        write(RED "⚠️  未验证手机用户限制每分钟 3 次请求，请使用`" HIY "verify 手机号码" NOR RED "`认证身份\n" NOR);
-        write(YEL "⚠️  认证身份的优势：\n1. 解除 3 RPM 的会话次数限制\n2. 保留和chatGPT的全部会话历史记录\n3. 可使用 mailto 指令下载会话记录到指定邮箱\n" NOR);
-        return 1;
-    }
 
     if (sizeof(word))
     {
+        // 指令限制
+        if (word[0] != "verify" && reject_command())
+        {
+            write(RED "⚠️  未验证手机用户限制每分钟 3 次请求，请使用`" HIY "verify 手机号码" NOR RED "`做安全认证\n" NOR);
+            write(YEL "⚠️  完成手机验证的优势：\n1. 解除 3 RPM 的会话次数限制\n2. 保留和chatGPT的全部会话历史记录\n3. 可使用 mailto 指令下载会话记录到个人邮箱\n" NOR);
+            return 1;
+        }
         // 长内容直接转为提问
         if (sizeof(word[0]) > 15 || (strsrch(word[0], "#") != -1))
         {
@@ -261,7 +262,7 @@ protected void response(string result)
     }
     else if (data["SuccessCounts"])
     {
-        content = "验证码信息已发送至您的手机，请注意查收 📱💟";
+        content = "验证码信息已发送至您的手机，请注意查收 📱 并输入指令 `verify <验证码>`完成验证 💟";
     }
 
     if (!sizeof(content))

@@ -9,7 +9,7 @@ protected void response(string result)
 int main(object me, string arg)
 {
     int PYTHON_CMD = 3;
-    int mobile = fetch_variable("mobile", me);
+    string mobile = fetch_variable("mobile", me);
 
     if (!arg)
     {
@@ -26,7 +26,7 @@ int main(object me, string arg)
         return notify_fail(RED "你还没有认证身份，无法发送会话记录到你的邮箱，请输入" HIY " verify " NOR RED "认证。\n" NOR);
     }
 
-    if (file_size("/log/history" + mobile + ".txt") < 1)
+    if (file_size("/log/history/" + mobile + ".txt") < 1)
     {
         return notify_fail(YEL "当前认证号码下还没有会话存档，请先和chatGPT聊聊呗 😅\n" NOR);
     }
