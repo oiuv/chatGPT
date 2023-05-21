@@ -10,8 +10,8 @@
         "sk-xxxxxxxxxxxxxxxxxxxxxxxx3"
     ],
     "proxy": "192.168.1.11:11223",
-    "wizard_ip": [
-        "127.0.0.1"
+    "wizards": [
+        "认证的手机号"
     ],
     "AppCode": "xxxxxxxxxxxxxxxx",
     "log": 15,
