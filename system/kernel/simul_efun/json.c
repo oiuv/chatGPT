@@ -313,8 +313,8 @@ private varargs mixed json_decode_parse_string(mixed* parse, int initiator_check
             out = replace_string(out, "\\\"", "\"");
         if(strsrch(out, "\\b") != -1)
             out = replace_string(out, "\\b", "\b");
-        if(strsrch(out, "\\f") != -1)
-            out = replace_string(out, "\\f", "\x0c");
+        // if(strsrch(out, "\\f") != -1)
+        //     out = replace_string(out, "\\f", "\x0c");
         if(strsrch(out, "\\n") != -1)
             out = replace_string(out, "\\n", "\n");
         if(strsrch(out, "\\r") != -1)
