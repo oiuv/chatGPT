@@ -182,6 +182,7 @@ int chat(string prompt)
     {
         Role = 0;
         Reply = 0;
+        Prompt = 0;
         Messages = ({});
         return notify_fail(HIY "已清除chatGPT角色设定和上下文会话记录😘\n" NOR);
     }
