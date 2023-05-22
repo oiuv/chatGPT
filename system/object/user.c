@@ -231,7 +231,7 @@ int chat(string prompt)
 protected void response(string result)
 {
     mixed data = ([]);
-    string content = result, msg;
+    string content = result, msg, err;
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR "\n";
 
@@ -247,7 +247,10 @@ protected void response(string result)
             // 备份JSONL文件
             write_file(LOG_DIR + "chatGPT.jsonl", result);
         }
-        data = json_decode(result);
+        if (err = catch(data = json_decode(result)))
+        {
+            content = err;
+        }
     }
     if (data["error"])
     {
