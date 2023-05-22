@@ -207,17 +207,8 @@ int chat(string prompt)
         // 未验证手机用户只关联最近一条会话
         history = 2;
     }
-    // todo 这里可以增加total_tokens判断避免超过上限，但3条会话大概率不会超，暂不判断
-    Messages = Messages[< history..] + ({(["role":"user", "content":prompt])});
-    // 设置chatGPT的角色
-    if (sizeof(Role))
-    {
-        if (Messages[0]["role"] == "system")
-            Messages[0]["content"] = Role;
-        else
-            Messages = ({(["role":"system", "content":Role])}) + Messages;
-    }
 
+    Messages = Messages[< history..] + ({(["role":"user", "content":prompt])});
     if (Mobile && Usage && Usage["total_tokens"] > 3072 && config("GPT-4"))
     {
         model = "gpt-4";
@@ -228,6 +219,14 @@ int chat(string prompt)
         model = "gpt-3.5-turbo";
     }
 
+    // 设置chatGPT的角色
+    if (sizeof(Role))
+    {
+        if (Messages[0]["role"] == "system")
+            Messages[0]["content"] = Role;
+        else
+            Messages = ({(["role":"system", "content":Role])}) + Messages;
+    }
 
     data = ([
         "model"       : model,
