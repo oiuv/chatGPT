@@ -164,6 +164,7 @@ int chat(string prompt)
     string *args = ({"-s", "https://api.openai.com/v1/chat/completions", "-H", "Content-Type: application/json", "-H", "Authorization: Bearer " + key});
     int CURL_CMD = 1;
     mapping data;
+    string model;
 
     if (__ARCH__ == "Microsoft Windows")
         CURL_CMD = 2;
@@ -217,8 +218,19 @@ int chat(string prompt)
             Messages = ({(["role":"system", "content":Role])}) + Messages;
     }
 
+    if (Mobile && Usage && Usage["total_tokens"] > 3072 && config("GPT-4"))
+    {
+        model = "gpt-4";
+        write(HIG "因消息令牌超过3K，已自动切换至GPT-4模型处理请求 ✨💕💞\n" NOR);
+    }
+    else
+    {
+        model = "gpt-3.5-turbo";
+    }
+
+
     data = ([
-        "model"       : "gpt-3.5-turbo",
+        "model"       : model,
         "temperature" : temperature,
         "messages"    : Messages
     ]);

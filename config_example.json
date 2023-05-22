@@ -16,5 +16,6 @@
     "AppCode": "xxxxxxxxxxxxxxxx",
     "log": 15,
     "history": 3,
-    "temperature": 1
+    "temperature": 1,
+    "GPT-4": 0
 }
