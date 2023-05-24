@@ -111,11 +111,10 @@ mixed process_input(string verb)
         if (word[0] != "verify" && reject_command())
         {
             write(RED "⚠️  未验证手机用户限制每分钟 3 次请求，请使用`" HIY "verify 手机号码" NOR RED "`做安全认证\n" NOR);
-            write(YEL "⚠️  完成手机验证的优势：\n"
+            write(YEL "⚠️  完成手机验证您将获得以下权限：\n"
                     "   1. 解除 3 RPM 的会话次数限制\n"
                     "   2. 可以使用更长的上下文关联(未验证只关联最近1条会话)\n"
-                    "   3. 保留和chatGPT的全部会话历史记录\n"
-                    "   4. 可使用 mailto 指令下载会话记录到个人邮箱\n"
+                    "   3. 可使用 mailto 指令下载你的会话历史记录到个人邮箱\n"
                 NOR);
             return 1;
         }

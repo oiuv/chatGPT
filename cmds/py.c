@@ -25,9 +25,9 @@ int main(object me, string arg)
 int help(object me)
 {
     write(@HELP
-指令格式 : python <...>
+指令格式 : py <...>
 
-调试专用，调用系统python指令运行程序。
+调试专用，调用系统python指令运行脚本。
 
 HELP );
     return 1;
