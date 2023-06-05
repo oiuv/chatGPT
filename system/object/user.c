@@ -157,7 +157,7 @@ int chat(string prompt)
     string key = element_of(config("openai_api_keys"));
     // 会话历史关联条数（包括 role 和 content，所以需*2）
     int history = config("history") * 2 || 6;
-    //采样时使用的温度值，取值范围为0到2之间，值越大生成输出的随机性越强
+    // 采样时使用的温度值，取值范围为0到2之间，值越大生成输出的随机性越强
     float temperature = config("temperature") || 1;
     string proxy = config("proxy");
     string *args = ({"-s", "https://api.openai.com/v1/chat/completions", "-H", "Content-Type: application/json", "-H", "Authorization: Bearer " + key});
@@ -320,6 +320,8 @@ void sms(string tpl)
     string url;
     string AppCode = config("AppCode");
 
+    if (__ARCH__ == "Microsoft Windows")
+        CURL_CMD = 2;
     if (!AppCode)
     {
         error("请先在config.json中配置AppCode！");

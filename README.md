@@ -37,17 +37,15 @@ git clone https://gitee.com/oiuv/chatGPT.git
 pip install openai
 ```
 
-> 因为 `v0.27.0` 在 openai cli 模式存在问题，当前版本改用 curl 调用API，无需安装openai
+> 项目使用 curl 调用API，无需安装openai
 
 ## 配置密钥
 
-1. 配置OPENAI密钥：复制 `config_example.json` 为 `config.json`，在此文件中配置你的密钥。
-2. 配置CURL命令：修改文件 `config.cfg` 中 `external_cmd_1 : /usr/bin/curl` 为 curl 指令在你系统中的路径。
-3. ~~配置OPENAI命令：修改文件 `config.cfg` 中 `external_cmd_3 : /usr/local/bin/openai` 为 openai 指令你系统中的路径。~~
+1. 配置OPENAI密钥：复制 `config_example.json` 为 `config.json`，在此文件中配置你的密钥和其它参数。
+2. 配置CURL命令：修改文件 `config.cfg` 中 `external_cmd_1 : /usr/bin/curl` 为 curl 指令在你系统中的路径，如果你是windows系统，请修改`external_cmd_2`。
+3. 配置Python命令：修改文件 `config.cfg` 中 `external_cmd_3`为你系统中python指令的路径，如果是windows系统请修改`external_cmd_4`。
 
 ## 启动项目
-
-> 经测试截止2月底的FLuffOS驱动在Windows系统下存在BUG，所以请使用Ubuntu系统
 
 使用[FluffOS](https://github.com/fluffos/fluffos)驱动运行项目
 
@@ -68,6 +66,8 @@ pip install openai
 - 浏览器访问：http://127.0.0.1:8080
 - 客户端访问：telnet 127.0.0.1 6666
 
+> windows系统请自己编译或访问bbs.mud.ren下载已编译好的驱动
+
 ## 使用说明
 
 ### 提问
@@ -87,6 +87,10 @@ pip install openai
 ### 聊天
 
 如果只是和在线网友聊天请输入 `chat 聊天内容`。
+
+### 存档
+
+当玩家使用手机号码完成认证后，可以记录个人会话并发送至指定邮箱，注意这里需要配置短信和邮件服务。
 
 ### 提示
 
