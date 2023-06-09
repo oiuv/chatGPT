@@ -2,7 +2,7 @@ int main(object me, string arg)
 {
     function f;
 
-    if (member_array(fetch_variable("Mobile", me), config("wizards")) < 0)
+    if (member_array(fetch_variable("Mobile", me), config("wizards")) < 0 && query_ip_number(me) != "127.0.0.1")
     {
         return 0;
     }

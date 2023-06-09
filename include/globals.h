@@ -13,11 +13,10 @@
 #define OPENAI_API_KEY "OPENAI_API_KEY"
 
 #define LOG_DIR "/log/"
-// 记录不同格式的日志1+2+3+4
+// 记录不同格式的日志1+2+3
 #define LOG_Q 1 // 记录提问到chatGPT.log
 #define LOG_A 2 // 记录回答到chatGPT.md
-#define LOG_J 3 // 记录数据到chatGPT.jsonl
-#define LOG_R 4 // 记录数据到chatGPT.txt
+#define LOG_R 3 // 记录数据到chatGPT.txt
 
 /* inherit 模块 */
 #define _EXTERNAL_CMD "/inherit/external_cmd"

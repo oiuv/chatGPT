@@ -247,16 +247,11 @@ protected void response(string result)
 
     if (bitCheck(config("log"), LOG_R))
     {
-        // 备份问答
+        // 备份问答RAW数据
         write_file(LOG_DIR + "chatGPT.txt", "> " + Prompt + "\n" + result + "\n");
     }
-    if (pcre_match(result, "^{.+}$"))
+    if (pcre_match(result, "^\\{[\\s\\S]+\\}\\R$"))
     {
-        if (bitCheck(config("log"), LOG_J))
-        {
-            // 备份JSONL文件
-            write_file(LOG_DIR + "chatGPT.jsonl", result);
-        }
         if (err = catch(data = json_decode(result)))
         {
             content = err;
@@ -291,7 +286,7 @@ protected void response(string result)
 
     if (!sizeof(content))
     {
-        content = "💤💥💢 <服务器未能正确响应请求> 💢💥💤";
+        content = "<服务器未能正确响应请求>";
     }
 
     msg = HIG "『chatGPT』" NOR + content + "\n";
