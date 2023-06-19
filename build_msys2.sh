@@ -1,9 +1,15 @@
 #!/bin/bash
 
+# 检查操作系统是否为 msys2
+if [[ $(uname -o) != "Msys" ]]; then
+    echo "This script should be run under msys2."
+    exit 1
+fi
+
 # 更新系统软件包列表
-sudo apt update
+pacman -Syu
 # 安装软件包及依赖库
-sudo apt install git bison build-essential libjemalloc-dev zlib1g-dev libssl-dev libmysqlclient-dev libsqlite3-dev libpq-dev libpcre3-dev libevent-dev libicu-dev libdw-dev binutils-dev gcc g++ autoconf automake cmake python3 -y
+pacman --noconfirm -S --needed mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-zlib mingw-w64-x86_64-pcre mingw-w64-x86_64-icu mingw-w64-x86_64-sqlite3 mingw-w64-x86_64-jemalloc mingw-w64-x86_64-gtest bison make
 
 # 如果 fluffos 目录不存在，则从 gitee 克隆 fluffos 仓库
 if [ ! -d "fluffos" ]; then
@@ -25,7 +31,7 @@ mkdir build && cd build
 starttime=`date +'%Y-%m-%d %H:%M:%S'`
 
 # 编译 fluffos，使用多线程编译，开启 SQLite 数据库和默认数据库支持
-cmake -DPACKAGE_DB_SQLITE=2 -DPACKAGE_DB_DEFAULT_DB=2 .. && make -j$(nproc) install
+cmake -G "MSYS Makefiles" -DPACKAGE_DB_SQLITE=2 -DPACKAGE_DB_DEFAULT_DB=2 .. && make -j$(nproc) install
 
 # 记录结束时间
 endtime=`date +'%Y-%m-%d %H:%M:%S'`
@@ -39,5 +45,5 @@ echo Start: $starttime.
 echo End: $endtime.
 echo "Build Time: "$((end_seconds-start_seconds))"s."
 
-# 复制驱动至系统目录
-sudo cp bin/driver /usr/local/games/
+# 复制驱动至LIB目录
+cp bin/driver.exe ../..

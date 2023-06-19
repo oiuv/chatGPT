@@ -208,9 +208,9 @@ int chat(string prompt)
     }
 
     Messages = Messages[< history..] + ({(["role":"user", "content":prompt])});
-    if (Mobile && Usage && Usage["total_tokens"] > 3072 && config("GPT-4"))
+    if (Usage && Usage["total_tokens"] > 3072)
     {
-        model = "gpt-4";
+        model = "gpt-3.5-turbo-16k";
         write(HIG "因消息令牌超过3K，已自动切换至GPT-4模型处理请求 ✨💕💞\n" NOR);
     }
     else
