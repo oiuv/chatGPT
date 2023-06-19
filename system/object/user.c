@@ -211,7 +211,7 @@ int chat(string prompt)
     if (Usage && Usage["total_tokens"] > 3072)
     {
         model = "gpt-3.5-turbo-16k";
-        write(HIG "因消息令牌超过3K，已自动切换至GPT-4模型处理请求 ✨💕💞\n" NOR);
+        write(HIG "💬 会话令牌(total_tokens)超过3K，自动使用GPT-4模型处理请求 ✨💕💞\n" NOR);
     }
     else
     {
@@ -278,10 +278,6 @@ protected void response(string result)
         Usage = data["usage"];
         // 让聊天室更有气氛
         say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
-    }
-    else if (data["SuccessCounts"])
-    {
-        content = "验证码信息已发送至您的手机，请注意查收 📱 并输入指令 `verify <验证码>`完成验证 💟";
     }
 
     if (!sizeof(content))
