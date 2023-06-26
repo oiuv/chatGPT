@@ -219,13 +219,16 @@ int chat(string prompt)
     }
 
     // 设置chatGPT的角色
-    if (sizeof(Role))
+    if (!sizeof(Role))
     {
-        if (Messages[0]["role"] == "system")
-            Messages[0]["content"] = Role;
-        else
-            Messages = ({(["role":"system", "content":Role])}) + Messages;
+        Role = "You are ChatGPT, a large language model trained by OpenAI.
+Knowledge cutoff: 2021-09
+Current date: " + ctime();
     }
+    if (Messages[0]["role"] == "system")
+        Messages[0]["content"] = Role;
+    else
+        Messages = ({(["role":"system", "content":Role])}) + Messages;
 
     data = ([
         "model"       : model,
@@ -241,7 +244,7 @@ int chat(string prompt)
 protected void response(string result)
 {
     mixed data = ([]);
-    string content = result, msg, err;
+    string content = result, msg, err, usage = "";
     // 读取LIB根目录下tips.md文件中的随机提示
     string tips = CYN "\n-提示" + element_of(read_lines("tips.md")) + NOR "\n";
 
@@ -276,6 +279,7 @@ protected void response(string result)
         }
         // 记录usage
         Usage = data["usage"];
+        usage = sprintf("-<prompt_tokens : %d, completion_tokens : %d>-\n", Usage["prompt_tokens"], Usage["completion_tokens"]);
         // 让聊天室更有气氛
         say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
     }
@@ -287,7 +291,7 @@ protected void response(string result)
 
     msg = HIG "『chatGPT』" NOR + content + "\n";
 
-    tell_object(this_object(), msg + tips);
+    tell_object(this_object(), msg + tips + usage);
 
     // 清除提问
     Prompt = 0;
