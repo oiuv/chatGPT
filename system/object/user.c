@@ -281,7 +281,7 @@ protected void response(string result)
         Usage = data["usage"];
         usage = sprintf("-<prompt_tokens : %d, completion_tokens : %d>-\n", Usage["prompt_tokens"], Usage["completion_tokens"]);
         // 让聊天室更有气氛
-        say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
+        // say(sprintf("【%s】chatGPT回复了 %s 的消息，会话消耗 %d tokens 😘\n", ctime(data["created"]), geteuid(), Usage["total_tokens"]));
     }
 
     if (!sizeof(content))
@@ -289,9 +289,11 @@ protected void response(string result)
         content = "<服务器未能正确响应请求>";
     }
 
-    msg = HIG "『chatGPT』" NOR + content + "\n";
+    // msg = HIG "『chatGPT』" NOR + content + "\n";
+    msg = HIG "『chatGPT』" NOR HBRED "@"+ geteuid() + NOR " " + content + "\n";
 
-    tell_object(this_object(), msg + tips + usage);
+    // tell_object(this_object(), msg + tips + usage);
+    shout(HIG "『 会 话 』" NOR HIY + geteuid() + " 💬 " NOR HIC + Prompt + NOR "\n" + msg + tips + usage);
 
     // 清除提问
     Prompt = 0;
